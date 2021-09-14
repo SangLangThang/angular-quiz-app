@@ -1,0 +1,39 @@
+<div class="section">
+  <img src="../assets/body_bg_2.jpg" class="bg-img" alt="">
+  <form class="example-form" [formGroup]="clientForm">
+    <mat-form-field class="full-width" appearance="outline">
+      <mat-label>Họ và Tên</mat-label>
+      <input type="text" matInput formControlName="name" />
+    </mat-form-field>
+    <div class="full-width multi-input">
+      <mat-form-field appearance="outline" class="custom-input">
+        <mat-label>Trường</mat-label>
+        <input type="text" matInput formControlName="school" />
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="custom-input">
+        <mat-label>Lớp</mat-label>
+        <input type="text" matInput formControlName="class" />
+
+      </mat-form-field>
+    </div>
+    <div class="full-width multi-input">
+      <mat-form-field appearance="outline" class="custom-input">
+        <mat-label>Cấp</mat-label>
+        <mat-select formControlName="levelId" (valueChange)="onLevelChange($event)">
+          <mat-option *ngFor="let level of levels" [value]="level.levelId">
+            {{level.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="custom-input">
+        <mat-label>Bộ đề</mat-label>
+        <mat-select formControlName="topicId">
+          <mat-option *ngFor="let topic of topics" [value]="topic.topicId">
+            {{ topic.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <button mat-raised-button color="primary" [disabled]="clientForm.invalid" type="submit" class="start-btn" (click)="onSubmit()">Bắt đầu</button>
+  </form>
+</div>

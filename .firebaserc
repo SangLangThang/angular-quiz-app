@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "quiz-app-e68d9": {
+      "hosting": {
+        "quiz-app": [
+          "quiz-app-e68d9"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "quiz-app-e68d9"
+  }
+}

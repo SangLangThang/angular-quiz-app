@@ -1,0 +1,52 @@
+.form-group {
+  display: flex;
+  gap: 10px;
+}
+
+:host {
+  width: 100%;
+  padding: 10px;
+}
+.form {
+  display: flex;
+  flex-direction: column;
+  & .group-btn {
+    width:20%;
+    position: relative;
+    * {
+      margin-right: 5px;
+    }
+  }
+}
+.hide_element{
+  position: absolute;
+  top: 0;
+  left: -10px;
+  width: 40px;
+  height: 40px;
+  z-index: 2;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.custom-input {
+  width: 70%;
+  & textarea {
+    font-size: 16px;
+  }
+}
+.group-action{
+  * {
+    margin-right: 5px;
+  }
+}
+
+@media only screen and (max-width: 720px) {
+  .mat-checkbox{
+    .mat-checkbox-layout{
+      display: flex;
+      flex-direction: column;
+    }
+  }
+ 
+}

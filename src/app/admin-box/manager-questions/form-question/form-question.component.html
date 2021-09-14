@@ -1,0 +1,44 @@
+<form class="form w-100" [formGroup]="questionForm" (ngSubmit)="onSubmit(questionForm.value)">
+
+
+  <div class="form-group">
+    <mat-form-field appearance="outline" class="custom-input">
+      <mat-label>Câu hỏi</mat-label>
+      <textarea matInput formControlName="question" [mat-autosize]="true"></textarea>
+    </mat-form-field>
+    <div class="group-btn">
+      <mat-checkbox formControlName="multiAnswer">Nhiều đáp án</mat-checkbox>
+    </div>
+  </div>
+
+  <div formArrayName="answers" *ngFor="let answer of answers.controls; let i = index;">
+    <div class="form-group" [formGroupName]="i">
+      <mat-form-field appearance="outline" class="custom-input">
+        <mat-label>Lựa chọn {{ i + 1 }}</mat-label>
+        <textarea matInput formControlName="name" [mat-autosize]="true"></textarea>
+      </mat-form-field>
+      <div class="group-btn">
+        <mat-checkbox formControlName="status"></mat-checkbox>
+        <div class="hide_element" (click)="clearCheckbox(i)"></div>
+        <button mat-mini-fab color="primary" type="button" (click)="addAnswer()">
+          +
+        </button>
+        <button mat-mini-fab color="warn" type="button" (click)="removeAnswer(i)" *ngIf="answers.controls.length > 1">
+          -
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="group-action">
+    <button mat-raised-button color="primary" type="submit" [disabled]="!questionForm.valid">
+      Xác nhận
+    </button>
+    <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
+      Reset
+    </button>
+    <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
+      Cancel
+    </button>
+  </div>
+</form>

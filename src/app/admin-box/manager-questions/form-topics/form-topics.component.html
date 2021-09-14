@@ -1,0 +1,12 @@
+<div class="topic">
+    <p>{{level.name}}</p>
+    <mat-form-field appearance="outline">
+        <mat-label>Tên đề</mat-label>
+        <input type="text" matInput [(ngModel)]="inputNameTopic" />
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="addTopic()">Thêm</button>
+</div>
+<div *ngFor="let topic of topics" class="topic">
+    <p>{{topic.name}}</p>
+    <button mat-raised-button color="primary" (click)="deleteTopic()" [disabled]="true">Xoá</button>
+</div>

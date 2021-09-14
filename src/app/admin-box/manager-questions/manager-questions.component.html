@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="group">
+    <mat-form-field appearance="outline" class="custom-input">
+      <mat-label>Cấp</mat-label>
+      <mat-select (valueChange)="onChangedLevel($event)" [(ngModel)]="defautLevel">
+        <mat-option *ngFor="let level of levels" [value]="level.levelId">
+          {{ level.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button mat-raised-button color="primary"  [routerLink]="['topics']">Thêm
+      đề</button>
+  </div>
+  <div>
+    <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
+      <mat-tab [label]="topic.name" [aria-label]="topic.topicId" *ngFor="let topic of topics;">
+        <div class="question" *ngFor="let question of questions;let i =index;">
+          <mat-expansion-panel hideToggle>
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                Câu {{i+1}} : {{question.question}}
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <p class="answer" *ngFor="let answer of question.answers;let j = index;"> {{answer.name}}
+              <mat-icon color="primary" *ngIf="answer.status===true">check_circle</mat-icon>
+            </p>
+          </mat-expansion-panel>
+          <button mat-raised-button color="primary" (click)="editQuestion(question)">Sửa</button>
+          <button mat-raised-button color="warn" (click)="deleteQuestion('f')">Xoá</button>
+        </div>
+        <button mat-raised-button color="primary" [routerLink]="['new']">Thêm</button>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

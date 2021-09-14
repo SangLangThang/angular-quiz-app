@@ -1,0 +1,29 @@
+<table *ngIf="dataSource && dataSource.length>0" mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+    <ng-container matColumnDef="ten">
+      <th mat-header-cell *matHeaderCellDef> Tên</th>
+      <td mat-cell *matCellDef="let element"> {{element.ten}} </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="truong">
+      <th mat-header-cell *matHeaderCellDef> Trường </th>
+      <td mat-cell *matCellDef="let element"> {{element.truong}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lop">
+      <th mat-header-cell *matHeaderCellDef> Lớp </th>
+      <td mat-cell *matCellDef="let element"> {{element.lop}} </td>
+    </ng-container>
+  
+    <ng-container matColumnDef="diem">
+      <th mat-header-cell *matHeaderCellDef> Điểm số </th>
+      <td mat-cell *matCellDef="let element"> {{element.diem}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef> Thời gian thi </th>
+      <td mat-cell *matCellDef="let element"> {{element.time}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>

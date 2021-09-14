@@ -1,0 +1,14 @@
+<mat-drawer-container class="container" autosize>
+  <mat-drawer class="sidenav" mode="side" opened>
+    <a routerLink="questions" mat-raised-button class="quiz-btn">
+      <mat-icon>question_answer</mat-icon>
+    </a>
+    <a routerLink="clients" mat-raised-button class="quiz-btn">
+      <mat-icon>supervised_user_circle</mat-icon>
+    </a>
+  </mat-drawer>
+
+  <div class="sidenav-content">
+    <router-outlet></router-outlet>
+  </div>
+</mat-drawer-container>
