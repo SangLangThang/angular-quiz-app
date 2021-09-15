@@ -16,6 +16,7 @@ import { InfoBoxComponent } from './quiz-box/info-box/info-box.component';
 import { QuizBoxComponent } from './quiz-box/quiz-box.component';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { StartBoxComponent } from './start-box/start-box.component';
+import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { StartBoxComponent } from './start-box/start-box.component';
     AdminModule,
     AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
+    NgxExtendedPdfViewerModule
   ],
   providers: [],
   bootstrap: [AppComponent],

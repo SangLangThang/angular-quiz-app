@@ -7,7 +7,7 @@
       <textarea matInput formControlName="question" [mat-autosize]="true"></textarea>
     </mat-form-field>
     <div class="group-btn">
-      <mat-checkbox formControlName="multiAnswer">Nhiều đáp án</mat-checkbox>
+      <mat-checkbox formControlName="multiAnswer">Multi</mat-checkbox>
     </div>
   </div>
 
@@ -37,8 +37,10 @@
     <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
       Reset
     </button>
-    <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
-      Cancel
+    <button mat-raised-button color="warn"[disabled]="true" (click)="questionForm.reset()" type="button">
+      Huỷ bỏ
     </button>
   </div>
 </form>
+
+

@@ -13,7 +13,6 @@ export class ManagerClientsComponent implements OnInit {
   ngOnInit(): void {
     this.firebase$.getClients().subscribe((clients: any) => {
       this.clients=clients
-      console.log(clients)
     });
   }
 }

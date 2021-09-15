@@ -26,7 +26,7 @@
             </p>
           </mat-expansion-panel>
           <button mat-raised-button color="primary" (click)="editQuestion(question)">Sửa</button>
-          <button mat-raised-button color="warn" (click)="deleteQuestion('f')">Xoá</button>
+          <button mat-raised-button color="warn" [disabled]="true" (click)="deleteQuestion('f')">Xoá</button>
         </div>
         <button mat-raised-button color="primary" [routerLink]="['new']">Thêm</button>
       </mat-tab>
