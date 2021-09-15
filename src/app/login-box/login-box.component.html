@@ -1,5 +1,5 @@
 <div class="report">
-  <div *ngIf="!isLogged">
+  <div>
     <h2>
       Phần này chỉ dành cho giáo viên.<br />Nếu bạn là giáo viên xin hãy nhập tài
       khoản và mật khẩu
@@ -21,22 +21,5 @@
         </button>
       </div>
     </form>
-  </div>
-  <div *ngIf="isLogged">
-    <h2>
-      Xin chào {{formGroup.value.username}}
-    </h2>
-    <div class="report-action">
-      <button mat-raised-button color="basic" class="report-btn" (click)="reportPDF()">
-        Xem PDF
-      </button>
-      <button mat-raised-button color="basic" class="report-btn" (click)="printPDF()">
-        In PDF
-      </button>
-      <button mat-raised-button color="basic" class="report-btn" (click)="printPDF()">
-        Tạo câu hỏi
-      </button>
-    </div>
-    <app-report-box-grid [dataSource]="dataSource"></app-report-box-grid>
   </div>
 </div>

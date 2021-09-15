@@ -1,5 +1,3 @@
-import { FirebaseService } from 'src/app/shared/firebase.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   Component,
   ElementRef,
@@ -8,9 +6,9 @@ import {
   Renderer2,
   ViewChildren,
 } from '@angular/core';
-import { ClientForm, Question } from 'src/app/models/User.model';
-import { questions } from 'src/app/shared/questions';
-import { take } from 'rxjs/operators';
+import { ActivatedRoute } from '@angular/router';
+import { ClientForm, QuestionsForm } from 'src/app/models/User.model';
+import { FirebaseService } from 'src/app/shared/firebase.service';
 @Component({
   selector: 'app-game-box',
   templateUrl: './game-box.component.html',
@@ -20,7 +18,7 @@ export class GameBoxComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private routes: ActivatedRoute,
-    private firebaseService: FirebaseService
+    private firebase$: FirebaseService
   ) {}
 
   @ViewChildren('option') options: QueryList<ElementRef>;
@@ -28,26 +26,23 @@ export class GameBoxComponent implements OnInit {
   ngOnInit(): void {
     this.clientId = this.routes.snapshot.params['client'];
     this.topicId = this.routes.snapshot.params['topic'];
-    this.firebaseService
-      .getClient(this.clientId)
-      .pipe(take(1))
-      .subscribe((client: any) => {
-        this.clientData = client;
-        this.client = client.name;
-      });
-    /* this.firebaseService.getQuestions(this.topicId).pipe(take(1)).subscribe((questions:any)=>{
-      this.questions=questions
+    this.firebase$.getClient(this.clientId).subscribe((client: any) => {
+      this.clientData = client;
+      this.client = client.name;
+    });
+    this.firebase$.getQuestions(this.topicId).subscribe((questions: any) => {
+      this.questions = questions;
+
       this.ques_total = questions.length;
       this.startGame();
-    }) */
-    this.questions = questions;
-    this.ques_total = questions.length;
-    this.startGame();
+    });
   }
   /* load data for game */
   showResult = false;
   showGame = true;
-  questions: Question[] = [];
+  questions: QuestionsForm[] = [];
+  ques_total = 0;
+  multiAnswer = false;
   /* variable start game */
   clientId: string;
   topicId: string;
@@ -56,7 +51,7 @@ export class GameBoxComponent implements OnInit {
   time_start = 5;
   percent = '0%';
   ques_start = 0;
-  ques_total = 0;
+  hasSelected: { index: number; status: boolean }[] = [];
   score = 0;
   correct = 0;
   start: any;
@@ -73,7 +68,7 @@ export class GameBoxComponent implements OnInit {
       this.percent = `${((5 - this.time_start) * 100) / 5}%`;
       if (this.time_start === 0) {
         clearInterval(this.start);
-        this.optionSelected(1000, this.questions[0].answer);
+        this.optionSelected(this.ques_start,1000, false);
       }
     }, 1000);
   }
@@ -93,7 +88,7 @@ export class GameBoxComponent implements OnInit {
     }
     this.showGame = false;
     this.showResult = true;
-    this.firebaseService.updateClient(this.clientId, this.score);
+    this.firebase$.updateClient(this.clientId, this.score, Date.now());
   }
   nextQuestion() {
     if (this.ques_start < this.ques_total) {
@@ -108,24 +103,38 @@ export class GameBoxComponent implements OnInit {
     }
     this.can_next_question = false;
   }
-
-  optionSelected(select: number, answer: number) {
-    this.can_next_question = true;
-    clearInterval(this.start);
+  optionSelected(questionIndex: number, select: number, answer: boolean) {
+    if (this.multiAnswer === true) {
+      /* this.options.forEach((ele: ElementRef, i: number) => {
+        if (i === select) this.renderer.addClass(ele.nativeElement, 'select');
+        this.hasSelected.push({ index: select, status: answer });
+      }); */
+    } else {
+      this.hasSelected.push({ index: select, status: answer });
+      this.can_next_question = true;
+      clearInterval(this.start);
+      this.options.forEach((ele: ElementRef, i: number) => {
+        if (select === i) {
+          if (answer) {
+            this.score++;
+            this.renderer.addClass(ele.nativeElement, 'correct');
+          } else {
+            this.renderer.addClass(ele.nativeElement, 'incorrect');
+            this.optionSelectedFull(this.questions[questionIndex])
+          }
+        }else{
+          this.optionSelectedFull(this.questions[questionIndex])
+        }
+      });
+    }
+  }
+  optionSelectedFull(question: QuestionsForm) {
     this.options.forEach((ele: ElementRef, i: number) => {
-      if (select === i) {
-        if (select === answer) {
-          this.score++;
-          this.renderer.addClass(ele.nativeElement, 'correct');
-        } else {
-          this.renderer.addClass(ele.nativeElement, 'incorrect');
-        }
-      } else {
-        if (i === answer) {
+      this.hasSelected.forEach((e) => {
+        if (e.index != i && question.answers[i].status === true) {
           this.renderer.addClass(ele.nativeElement, 'correct');
         }
-      }
-      this.renderer.addClass(ele.nativeElement, 'unselect');
+      });
     });
   }
 }

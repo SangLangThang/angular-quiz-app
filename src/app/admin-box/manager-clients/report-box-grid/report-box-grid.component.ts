@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { User } from 'src/app/models/User.model';
+import {ClientForm } from 'src/app/models/User.model';
 
 @Component({
   selector: 'app-report-box-grid',
@@ -9,7 +9,7 @@ import { User } from 'src/app/models/User.model';
 export class ReportBoxGridComponent implements OnInit {
   displayedColumns: string[] = ['ten', 'truong', 'lop', 'diem', 'time'];
 
-  @Input() dataSource: User[] = [];
+  @Input() dataSource: ClientForm [] = [];
 
   constructor() { }
 

@@ -178,6 +178,13 @@ section .option_list .option.incorrect {
     display: block;
   }
 }
+section .option_list .option.select{
+  & .icon.plus {
+    color: #84c5fe;
+    border-color: #96c4ec;
+    display: block;
+  }
+}
 .unselect {
   pointer-events: none;
 }

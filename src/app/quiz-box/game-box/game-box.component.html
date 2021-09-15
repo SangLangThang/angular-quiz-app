@@ -12,20 +12,21 @@
     <div *ngIf="i == ques_start" >
       <div class="que_text">
         <span>
-          {{ question.name }}
+          {{ question.question }}
         </span>
       </div>
       <div class="option_list" [class.flex]="question.type==='picture'">
-        <div class="option" #option *ngFor="let option of question.answers; index as i"
-          (click)="optionSelected(i, question.answer)">
+        <div class="option" #option *ngFor="let option of question.answers; index as j"
+          (click)="optionSelected(i,j, option.status)">
           <span *ngIf="question.type==='picture'; else nopicture" class="option_img">
-            <img [src]="option">
+            <img [src]="option.name">
           </span>
           <ng-template #nopicture>
-            <span>{{ option }}</span>
+            <span>{{ option.name }}</span>
           </ng-template>
           <mat-icon class="icon tick">check</mat-icon>
           <mat-icon class="icon cross">close</mat-icon>
+          <mat-icon class="icon plus">control_point</mat-icon>
         </div>
       </div>
     </div>

@@ -1,19 +1,12 @@
 import { Injectable } from '@angular/core';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { take } from 'rxjs/operators';
-import {
-  AngularFirestore,
-  AngularFirestoreCollection,
-} from '@angular/fire/compat/firestore';
-import { ClientForm, ILogin, QuestionsForm, User } from '../models/User.model';
+import { ClientForm, ILogin, QuestionsForm } from '../models/User.model';
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseService {
-  usersRef: AngularFirestoreCollection<User>;
-
-  constructor(private firestore: AngularFirestore) {
-    this.usersRef = this.firestore.collection('users');
-  }
+  constructor(private firestore: AngularFirestore) {}
 
   login(payload: ILogin) {
     return this.firestore
@@ -25,18 +18,24 @@ export class FirebaseService {
       .valueChanges();
   }
 
-  getUsers() {
-    return this.usersRef.valueChanges();
-  }
-
   addClient(clientForm: ClientForm) {
     return this.firestore.collection('clients').add(clientForm);
   }
-  getClient(clientId: string) {
-    return this.firestore.collection('clients').doc(clientId).valueChanges();
+  getClients() {
+    return this.firestore.collection('clients').valueChanges().pipe(take(1));
   }
-  updateClient(clientId: string, score: number) {
-    this.firestore.collection('clients').doc(clientId).update({ score: score });
+  getClient(clientId: string) {
+    return this.firestore
+      .collection('clients')
+      .doc(clientId)
+      .valueChanges()
+      .pipe(take(1));
+  }
+  updateClient(clientId: string, score: number, time: number) {
+    this.firestore
+      .collection('clients')
+      .doc(clientId)
+      .update({ score: score, time: time });
   }
 
   getLevels() {
@@ -55,9 +54,9 @@ export class FirebaseService {
       .valueChanges({ idField: 'topicId' })
       .pipe(take(1));
   }
-  getTopicsWithId(id:string) {
+  getTopicsWithId(id: string) {
     return this.firestore
-      .collection('topics',(ref) => ref.where('levelId', '==', id))
+      .collection('topics', (ref) => ref.where('levelId', '==', id))
       .valueChanges({ idField: 'topicId' })
       .pipe(take(1));
   }
@@ -66,7 +65,6 @@ export class FirebaseService {
       .collection('topics')
       .add({ name: name, levelId: levelId });
   }
-  
 
   getQuestions(topicId: string) {
     return this.firestore

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Levels, Questions, Topics } from '../models/User.model';
+import { Levels, Topics } from '../models/User.model';
 import { FirebaseService } from './../shared/firebase.service';
-import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-start-box',
   templateUrl: './start-box.component.html',
@@ -19,31 +18,22 @@ export class StartBoxComponent implements OnInit {
   levels: Levels[] = [];
   topicsData: Topics[] = [];
   topics: Topics[] = [];
-  questions: Questions[] = [];
-  levelDefault = '';
+  defaultLevel: string;
   ngOnInit(): void {
     this.buildForm();
-    this.firebaseService
-      .getLevels()
-      .pipe(take(1))
-      .subscribe((levels: any) => {
-        console.log('get data levels finish');
-        this.levels = levels;
-        this.clientForm.get('levelId')?.setValue(this.levels[2].levelId);
-        //use 2 because levels[2]={name:Cấp 1}
-      });
-    this.firebaseService
-      .getTopics()
-      .pipe(take(1))
-      .subscribe((topics: any) => {
-        console.log('get data topics finish:');
-        this.topicsData = topics;
-        this.topics = this.selectedTopics(
-          this.levels[2].levelId,
-          this.topicsData
-        );
-        this.clientForm.get('topicId')?.setValue(this.topics[0].topicId);
-      });
+    this.firebaseService.getLevels().subscribe((levels: any) => {
+      console.log('get levels finish');
+      this.levels = levels;
+      this.defaultLevel = this.levels[2].levelId;
+      this.clientForm.get('levelId')?.setValue(this.defaultLevel);
+      //use 2 because levels[2]={name:Cấp 1}
+    });
+    this.firebaseService.getTopics().subscribe((topics: any) => {
+      console.log('get topics finish');
+      this.topicsData = topics;
+      this.topics = this.selectedTopics(this.defaultLevel, this.topicsData);
+      this.clientForm.get('topicId')?.setValue(this.topics[0].topicId);
+    });
   }
 
   buildForm() {
@@ -63,7 +53,8 @@ export class StartBoxComponent implements OnInit {
   }
 
   onSubmit() {
-    const newClient = { score: 0, ...this.clientForm.value };
+    
+    const newClient = {time:Date.now(), score: 0, ...this.clientForm.value };
     this.firebaseService.addClient(newClient).then((value) => {
       this.router.navigate([
         'start',
