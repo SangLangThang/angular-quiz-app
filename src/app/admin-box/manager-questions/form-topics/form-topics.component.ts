@@ -1,3 +1,4 @@
+import { SortDataService } from './../../../shared/sort-data.service';
 import { ManagerQuestionsService } from './../../../shared/manager-questions.service';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { Component, OnInit } from '@angular/core';
@@ -13,7 +14,8 @@ export class FormTopicsComponent implements OnInit {
   constructor(
     private firebase$: FirebaseService,
     private managerQuestions$: ManagerQuestionsService,
-    private router: Router
+    private router: Router,
+    private sortData$:SortDataService
   ) {}
   topics: Topics[] = [];
   level: any;
@@ -22,12 +24,12 @@ export class FormTopicsComponent implements OnInit {
     this.level = this.managerQuestions$.getLevel();
     console.log(this.level)
     this.firebase$.getTopicsWithId(this.level.levelId).subscribe((topics: any) => {
-      this.topics = topics;
+      this.topics = this.sortData$.sortTopic(topics)
     });
   }
   addTopic(){
     this.firebase$.addTopic(this.level.levelId,this.inputNameTopic)
-    this.router.navigate(['admin']);
+    this.router.navigate(['admin/questions']);
   }
   deleteTopic(){
     

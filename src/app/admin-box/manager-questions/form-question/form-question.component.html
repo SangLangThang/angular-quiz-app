@@ -1,54 +1,54 @@
-<form class="form w-100" [formGroup]="questionForm" (ngSubmit)="onSubmit(questionForm.value)">
-
-
-  <div class="form-group">
-    <mat-form-field appearance="outline" class="custom-input">
-      <mat-label>Câu hỏi</mat-label>
-      <textarea matInput formControlName="question" [mat-autosize]="true"></textarea>
-    </mat-form-field>
-    <div class="group-btn">
-      <div class="flex-center">
-        <mat-checkbox formControlName="multiAnswer"></mat-checkbox>
-        <mat-icon>storage</mat-icon>
-      </div>
-      <div class="flex-center">
-        <mat-checkbox formControlName="picture" (click)="havePicture=!havePicture"></mat-checkbox>
-        <mat-icon>camera_alt</mat-icon>
-      </div>
-    </div>
-  </div>
-
-  <div formArrayName="answers" *ngFor="let answer of answers.controls; let i = index;">
-    <div class="form-group" [formGroupName]="i">
-      <mat-form-field appearance="outline" class="custom-input" *ngIf="havePicture">
-        <mat-label>Lựa chọn {{ i + 1 }}</mat-label>
-        <textarea matInput formControlName="name" [mat-autosize]="true"></textarea>
+<div class="row">
+  <form class="form" [formGroup]="questionForm" (ngSubmit)="onSubmit(questionForm.value)">
+    <div class="question">
+      <mat-form-field appearance="outline" class="question-info">
+        <mat-label>Câu hỏi</mat-label>
+        <textarea matInput formControlName="question" [mat-autosize]="true"></textarea>
       </mat-form-field>
-      <div class="form-img">
-        <app-upload-file *ngIf="havePicture"></app-upload-file>
-      </div>
-      <div class="group-btn">
-        <mat-checkbox formControlName="status"></mat-checkbox>
-        <div class="hide_element" (click)="clearCheckbox(i)"></div>
-        <button mat-mini-fab color="primary" type="button" (click)="addAnswer()">
-          +
-        </button>
-        <button mat-mini-fab color="warn" type="button" (click)="removeAnswer(i)" *ngIf="answers.controls.length > 1">
-          -
-        </button>
+      <div class="question-btn">
+        <div class="question-btn-item">
+          <mat-checkbox formControlName="multiAnswer"></mat-checkbox>
+          <mat-icon>storage</mat-icon>
+        </div>
+        <div class="question-btn-item">
+          <mat-checkbox formControlName="picture" (click)="havePicture=!havePicture"></mat-checkbox>
+          <mat-icon>camera_alt</mat-icon>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="group-action">
-    <button mat-raised-button color="primary" type="submit" [disabled]="!questionForm.valid">
-      Xác nhận
-    </button>
-    <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
-      Reset
-    </button>
-    <button mat-raised-button color="warn" [disabled]="true" (click)="questionForm.reset()" type="button">
-      Huỷ bỏ
-    </button>
-  </div>
-</form>
+    <div formArrayName="answers"  *ngFor="let answer of answers.controls; let i = index;">
+      <div class="question" [formGroupName]="i">
+        <mat-form-field appearance="outline" class="question-info" *ngIf="!havePicture">
+          <mat-label>Lựa chọn {{ i + 1 }}</mat-label>
+          <textarea matInput formControlName="name" [mat-autosize]="true"></textarea>
+        </mat-form-field>
+        <div class="form-img">
+          <app-upload-file *ngIf="havePicture"></app-upload-file>
+        </div>
+        <div class=" question-btn question-btn-2">
+          <mat-checkbox formControlName="status"></mat-checkbox>
+          <div class="hide_element" (click)="clearCheckbox(i)"></div>
+          <button mat-mini-fab color="primary" type="button" (click)="addAnswer()">
+            +
+          </button>
+          <button mat-mini-fab color="warn" type="button" (click)="removeAnswer(i)" *ngIf="answers.controls.length > 1">
+            -
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="group-action">
+      <button mat-raised-button color="primary" type="submit" [disabled]="!questionForm.valid">
+        Xác nhận
+      </button>
+      <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
+        Reset
+      </button>
+      <button mat-raised-button color="warn" routerLink="/admin/questions" type="button">
+        Huỷ bỏ
+      </button>
+    </div>
+  </form>
+</div>

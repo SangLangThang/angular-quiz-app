@@ -1,0 +1,25 @@
+<div class="box-title">
+    <h2 mat-dialog-title class="title">Phần này chỉ dành cho giáo viên</h2>
+    <mat-spinner [diameter]="20" class="load" *ngIf="isLoging"></mat-spinner>
+</div>
+<p class="error" *ngIf='hasError'> Sai tài khoản hoặc mật khẩu</p>
+<div mat-dialog-content class="box-form">
+    <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup.value)" class="form">
+        <div class="row">
+            <mat-form-field appearance="outline" class="col-lg-6 col-12">
+                <mat-label>Tài khoản</mat-label>
+                <input type="text" matInput formControlName="username" />
+            </mat-form-field>
+            <mat-form-field appearance="outline" class="col-lg-6 col-12">
+                <mat-label>Mật khẩu</mat-label>
+                <input type="password" matInput formControlName="password" />
+            </mat-form-field>
+        </div>
+        <div>
+            <button mat-button mat-dialog-close>Quay lại</button>
+            <button mat-raised-button color="primary" type="submit" class="button" [disabled]="!formGroup.valid">
+                Xác nhận
+            </button>
+        </div>
+    </form>
+</div>

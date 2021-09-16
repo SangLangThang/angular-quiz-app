@@ -12,14 +12,13 @@ import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { LoginBoxComponent } from './login-box/login-box.component';
 import { MaterialModule } from './material-module';
-import { GameBoxComponent } from './quiz-box/game-box/game-box.component';
-import { QuizBoxComponent } from './quiz-box/quiz-box.component';
+import { GameBoxComponent } from './game-box/game-box.component';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { LandingPageComponent } from './landing-page/landing-page.component';
 import { RulesModalComponent } from './landing-page/rules-modal/rules-modal.component';
 import { FormClientModalComponent } from './landing-page/form-client-modal/form-client-modal.component';
-import { LoadingComponent } from './loading/loading.component';
+import { LoginModalComponent } from './landing-page/login-modal/login-modal.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,12 +26,11 @@ import { LoadingComponent } from './loading/loading.component';
 
     DialogComponent,
     GameBoxComponent,
-    QuizBoxComponent,
     SnackBarComponent,
     LandingPageComponent,
     RulesModalComponent,
     FormClientModalComponent,
-    LoadingComponent,
+    LoginModalComponent,
   ],
   imports: [
     BrowserModule,

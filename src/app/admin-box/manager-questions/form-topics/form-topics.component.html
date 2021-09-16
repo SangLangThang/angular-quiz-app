@@ -5,6 +5,7 @@
         <input type="text" matInput [(ngModel)]="inputNameTopic" />
     </mat-form-field>
     <button mat-raised-button color="primary" (click)="addTopic()">Thêm</button>
+    <button mat-raised-button color="warn" routerLink="/admin/questions">Huỷ bỏ</button>
 </div>
 <div *ngFor="let topic of topics" class="topic">
     <p>{{topic.name}}</p>

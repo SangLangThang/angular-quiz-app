@@ -15,14 +15,14 @@ export class ManagerQuestionsService {
   setTopic(topic:any){
     this.storage.setItem('topic',JSON.stringify(topic));
   }
+  getTopic(){
+    return JSON.parse(this.storage.getItem('topic')||'')
+  }
   setQuestion(question:any){
     this.storage.setItem('question',JSON.stringify(question));
   }
   getQuestion(){
     return JSON.parse(this.storage.getItem('question')||'')
-  }
-  getTopic(){
-    return JSON.parse(this.storage.getItem('topic')||'')
   }
   clearData(){
     this.storage.clear()

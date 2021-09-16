@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { LoginModalComponent } from './landing-page/login-modal/login-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -6,10 +8,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  showStartBox=true
-  showReportBox=false;
-  toggleShow(){
-    this.showReportBox=!this.showReportBox;
-    this.showStartBox=!this.showStartBox;
+  constructor( public dialog: MatDialog){
+
+  }
+  openDialog(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.width='50%';
+    this.dialog.open(LoginModalComponent,dialogConfig)
   }
 }

@@ -1,0 +1,22 @@
+.box-title{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .load{
+        margin-bottom: 16px;
+        margin-left: 30px;
+    }
+}
+.form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.error{
+    color: deeppink;
+    text-align: center;
+}
+.button{
+    margin-left: 5px;
+}

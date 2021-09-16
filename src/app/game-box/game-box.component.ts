@@ -1,4 +1,4 @@
-import { SessionService } from './../../shared/session.service';
+import { SessionService } from '../shared/session.service';
 import {
   Component,
   ElementRef,
@@ -26,7 +26,6 @@ export class GameBoxComponent implements OnInit {
   @ViewChildren('option') options: QueryList<ElementRef>;
 
   ngOnInit(): void {
-
     this.clientId = this.session$.getClientId()
     this.topicId = this.session$.getClientTopicId()
     console.log('client',this.clientId)
@@ -41,6 +40,8 @@ export class GameBoxComponent implements OnInit {
       /* this.startGame(); */
     });
   }
+  /* UI */
+  showBackground=true
   /* load data for game */
   showResult = false;
   showGame = true;
@@ -78,6 +79,7 @@ export class GameBoxComponent implements OnInit {
   }
 
   endGame() {
+    this.showBackground=false
     if (this.score > 3) {
       this.result_icon = '🎉';
       this.result_slogan = 'Thật tuyệt!';

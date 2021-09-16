@@ -1,10 +1,10 @@
+import { SessionService } from './../../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { DialogService } from '../../../shared/dialog.service';
-import { ManagerQuestionsService } from './../../../shared/manager-questions.service';
 @Component({
   selector: 'app-form-question',
   templateUrl: './form-question.component.html',
@@ -14,7 +14,7 @@ export class FormQuestionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog$: DialogService,
-    private managerQuestions$: ManagerQuestionsService,
+    private session$: SessionService,
     private firebase$: FirebaseService,
     private router: Router
   ) {}
@@ -28,12 +28,12 @@ export class FormQuestionComponent implements OnInit {
   }
   ngOnInit(): void {
     this.buildForm();
-    this.dataFromSession = this.managerQuestions$.getQuestion();
+    this.dataFromSession = this.session$.getQuestion();
     if (this.dataFromSession !== '') {
       this.questionId = this.dataFromSession.questionId;
       this.updateForm(this.dataFromSession);
     } else {
-      this.topicId = this.managerQuestions$.getTopic().topicId;
+      this.topicId = this.session$.getTopic().topicId;
     }
   }
 

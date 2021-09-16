@@ -1,7 +1,6 @@
 
 :host {
   width: 100%;
-  padding: 10px;
 }
 button {
   margin-bottom: 10px;
@@ -35,6 +34,12 @@ button {
   color: white;
 }
 
-@media only screen and (max-width: 600px) {
-  
+.report-table tr.search{
+  &:hover{
+    background-color:transparent;
+  }
+  th{
+    background-color: transparent;
+    border: none;
+  }
 }

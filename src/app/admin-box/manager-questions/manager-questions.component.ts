@@ -1,9 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { SortDataService } from './../../shared/sort-data.service';
+import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Levels, QuestionsForm, Topics } from 'src/app/models/User.model';
 import { FirebaseService } from './../../shared/firebase.service';
-import { ManagerQuestionsService } from './../../shared/manager-questions.service';
+import { SessionService } from './../../shared/session.service';
 
 @Component({
   selector: 'app-manager-questions',
@@ -14,91 +15,94 @@ export class ManagerQuestionsComponent implements OnInit {
   levels: Levels[];
   topicsData: Topics[];
   topics: Topics[];
-  
+
   questions: QuestionsForm[];
   showQuestion: boolean = true;
   showFormQuestion: boolean = false;
   selectValue: string = '';
 
-  defautLevel: string;
-  defaultTopic:string
-  defaultIndexTab = 0;
+  currentLevelId:string;
+  currentTopicId: string;
+  currentIndexTab = 0;
   constructor(
     private firebase$: FirebaseService,
     private router: Router,
-    private managerQuestions$: ManagerQuestionsService
+    private session$: SessionService,
+    private sortData$: SortDataService
   ) {}
   ngOnInit(): void {
-    console.log("init manager question")
+    console.log('init manager question');
     this.startManager();
   }
 
-  startManager(indexLevel = 2) {
-    this.managerQuestions$.clearData();
-    this.managerQuestions$.setQuestion('');
+  startManager() {
+    this.session$.clearSesstion();
+    this.session$.setQuestion('');
     this.firebase$.getLevels().subscribe((levels: any) => {
       console.log('get levels ok');
-      this.levels = levels;
-      this.defautLevel = this.levels[indexLevel].levelId;
-      this.managerQuestions$.setLevel(
-        this.addLevelToSession(this.defautLevel, this.levels)
-      );
+      this.levels = this.sortData$.sortLevel(levels);
+      this.currentLevelId = this.levels[0].levelId;
+      this.session$.setLevel(this.getLevelWithLevelId(this.currentLevelId,this.levels));
     });
+    //use get all topics because get levels have delay=> cannot get topic with levelID
     this.firebase$.getTopics().subscribe((topics: any) => {
       console.log('get topics ok');
-      console.log(topics)
-      this.topicsData = topics;
-      this.topics = this.selectedTopics(this.defautLevel, this.topicsData);
+      this.topicsData = this.sortData$.sortTopic(topics);
+      this.topics = this.selectedTopics(this.currentLevelId, this.topicsData);
     });
   }
 
   selectedTopics(levelId: string, topics: Topics[]): Topics[] {
     return topics.filter((topic) => topic.levelId === levelId);
   }
-  addLevelToSession(levelId: string, levels: Levels[]) {
+  getLevelWithLevelId(levelId: string, levels: Levels[]) {
     let newLevel = [...levels];
     return newLevel.filter((e) => e.levelId === levelId)[0];
   }
 
   onChangedLevel(levelId: string) {
-    this.managerQuestions$.setLevel(
-      this.addLevelToSession(levelId, this.levels)
-    );
+    this.session$.setLevel(this.getLevelWithLevelId(levelId, this.levels));
     /*  */
-    this.defautLevel = levelId;
-    this.topics = this.selectedTopics(this.defautLevel, this.topicsData);
-    while (this.topics[this.defaultIndexTab] === undefined) {
-      this.defaultIndexTab--;
-    }
-    this.firebase$
-      .getQuestions(this.topics[this.defaultIndexTab].topicId)
+    this.currentLevelId = levelId;
+    this.topics = this.selectedTopics(levelId, this.topicsData);
+
+    if(this.topics.length>0){
+      while (
+        this.topics[this.currentIndexTab] === undefined &&
+        this.currentIndexTab >= 0
+      ) {
+        this.currentIndexTab--;
+      }
+      this.firebase$
+      .getQuestions(this.topics[this.currentIndexTab].topicId)
       .subscribe((questions: any) => {
         console.log('get questions ok');
         this.questions = questions;
       });
-
-    this.managerQuestions$.setTopic(this.topics[this.defaultIndexTab]);
+      this.session$.setTopic(this.topics[this.currentIndexTab]);
+    }
   }
 
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
-    this.defaultIndexTab = tabChangeEvent.index;
-    this.defaultTopic = tabChangeEvent.tab.ariaLabel;
-
-    this.managerQuestions$.setTopic(this.topics[this.defaultIndexTab]);
-    this.firebase$.getQuestions(this.defaultTopic).subscribe((questions: any) => {
-      console.log('get questions ok');
-      this.questions = questions;
-    });
+    if(this.topics.length>0){
+      this.currentIndexTab = tabChangeEvent.index;
+      this.currentTopicId = tabChangeEvent.tab.ariaLabel;
+      this.session$.setTopic(this.topics[this.currentIndexTab]);
+      this.firebase$
+        .getQuestions(this.currentTopicId)
+        .subscribe((questions: any) => {
+          console.log('get questions ok');
+          this.questions = questions;
+        });
+    }
   }
 
   editQuestion(question: QuestionsForm) {
-    this.managerQuestions$.setQuestion(question);
+    this.session$.setQuestion(question);
     this.router.navigate(['/admin/questions/edit']);
   }
 
   deleteQuestion(questionId: string) {
     console.log(questionId);
   }
-
- 
 }

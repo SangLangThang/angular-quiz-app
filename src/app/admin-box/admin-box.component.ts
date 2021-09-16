@@ -6,6 +6,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-box.component.scss'],
 })
 export class AdminBoxComponent implements OnInit {
-  constructor() {}
-  ngOnInit(): void {}
+  constructor( ) {}
+  ngOnInit(): void {
+   
+  }
+  title="quản lý câu hỏi"
+
 }

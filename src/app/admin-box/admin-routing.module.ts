@@ -20,7 +20,7 @@ const adminRoutes: Routes = [
         component: FormTopicsComponent,
       },
       { path: 'questions/edit', component: FormQuestionComponent },
-      { path: 'questions/clients', component: ManagerClientsComponent },
+      { path: 'clients', component: ManagerClientsComponent },
       { path: 'questions', component: ManagerQuestionsComponent },
     ],
   },

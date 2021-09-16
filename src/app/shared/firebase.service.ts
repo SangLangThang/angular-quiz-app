@@ -1,9 +1,7 @@
-import { SessionService } from './session.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
-import { Observable } from 'rxjs';
-import { take,finalize } from 'rxjs/operators';
+import { finalize, take } from 'rxjs/operators';
 import { ClientForm, ILogin, QuestionsForm } from '../models/User.model';
 @Injectable({
   providedIn: 'root',
@@ -12,9 +10,9 @@ export class FirebaseService {
   constructor(
     private firestore: AngularFirestore,
     private storage: AngularFireStorage,
-    private session$:SessionService
   ) {}
-  isCreatedClient=true;
+  isCreatedClient=false;
+  isLogin=true;
 
   downloadURL:string;
   uploadFile(file:any) {
@@ -38,7 +36,7 @@ export class FirebaseService {
           .where('username', '==', payload.username)
           .where('password', '==', payload.password)
       )
-      .valueChanges();
+      .valueChanges().pipe(take(1));
   }
 
   addClient(clientForm: ClientForm) {

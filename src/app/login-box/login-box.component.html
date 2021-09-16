@@ -4,22 +4,6 @@
       Phần này chỉ dành cho giáo viên.<br />Nếu bạn là giáo viên xin hãy nhập tài
       khoản và mật khẩu
     </h2>
-    <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup.value)" class="form">
-      <mat-form-field appearance="outline" class="custom-input">
-        <mat-label>Tài khoản</mat-label>
-        <input type="text" matInput formControlName="username" />
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="custom-input">
-        <mat-label>Mật khẩu</mat-label>
-        <input type="password" matInput formControlName="password" />
-      </mat-form-field>
-
-      <div class="form-element">
-        <button mat-raised-button color="primary" type="submit" class="button" [disabled]="!formGroup.valid">
-          Xác nhận
-        </button>
-      </div>
-    </form>
+    
   </div>
 </div>

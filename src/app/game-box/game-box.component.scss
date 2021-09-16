@@ -1,10 +1,8 @@
-.game-box,
-.result_box {
-  width: 550px;
+.game-box {
+  width: 70%;
   background: #fff;
   border-radius: 5px;
   transition: all 0.3s ease;
-  margin: 20px auto;
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
 }
 
@@ -178,7 +176,7 @@ section .option_list .option.incorrect {
     display: block;
   }
 }
-section .option_list .option.select{
+section .option_list .option.select {
   & .icon.plus {
     color: #84c5fe;
     border-color: #96c4ec;
@@ -190,8 +188,15 @@ section .option_list .option.select{
 }
 .result_box {
   text-align: center;
+  width: 70%;
+  max-width: 700px;
+  background: #fff;
+  border-radius: 5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
   & img {
     max-width: 100%;
+    
   }
   & .complete_text {
     font-size: 20px;
@@ -212,22 +217,52 @@ section .option_list .option.select{
     margin: 10px 0;
   }
 }
-.hide{
+.hide {
   display: none;
 }
-@media only screen and (max-width: 600px) {
-  .game-box {
-    width: 90%;
+
+.box {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 110px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bg {
+  width: 100%;
+  height: calc(100vh - 110px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  text-align: center;
+  z-index: -1;
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
-  section .option_list {
-    &.flex {
-      grid-template-columns: repeat(1, 1fr);
-      & .option {
-        width: 100%;
-      }
+}
+@media only screen and (max-width: 720px) {
+  .game-box {
+    width: 100%;
+    box-shadow: none;
+    header {
+      padding: 0 5px;
+    }
+    section {
+      padding: 30px 5px;
+    }
+    footer {
+      padding: 0 5px;
     }
   }
   .result_box{
-    width: 90%;
+    width: 100%;
+    box-shadow: none;
+  }
+  .bg {
+    display: none;
   }
 }

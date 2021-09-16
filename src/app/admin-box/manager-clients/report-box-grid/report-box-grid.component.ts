@@ -12,7 +12,7 @@ export class ReportBoxGridComponent implements OnInit {
   @Input() clients: ClientForm[] = [];
 
   constructor() {}
-
+  
   ngOnInit(): void {}
   printPdf() {
     let data = this.pdftable.nativeElement;
@@ -28,5 +28,8 @@ export class ReportBoxGridComponent implements OnInit {
       pdf.addImage(contentDataURL, 'PNG', 0, position, imgWidth, imgHeight);
       pdf.save('ReportPdf.pdf');
     });
+  }
+  onChangeName(){
+    
   }
 }

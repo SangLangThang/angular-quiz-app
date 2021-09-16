@@ -1,5 +1,5 @@
 .logo {
-  max-width: 100px;
+  max-width: 50px;
 }
 .login-btn {
   width: fit-content;
@@ -10,10 +10,12 @@
   flex: 1 1 auto;
 }
 .header {
-  height: 110px;
+  height: 100px;
+  margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background-color: #fafafa;
 }
 footer{
   width: 100%;

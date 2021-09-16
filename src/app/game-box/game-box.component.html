@@ -1,0 +1,69 @@
+<div class=box>
+  <div class="bg" *ngIf="showBackground">
+    <img src="../../assets/loading.jpg" alt="">
+  </div>
+  <div class="game-box" *ngIf="showGame">
+    <header>
+      <div class="title">Tìm hiểu kiến thức ATGT</div>
+      <div class="timer">
+        <div class="time_left_txt">Thời gian còn lại</div>
+        <div class="timer_sec">{{ time_start }}</div>
+      </div>
+      <div class="time_line" [style.width]="percent"></div>
+    </header>
+    <!-- section -->
+    <section *ngFor="let question of questions; index as i" [class.hide]="i !== ques_start">
+      <div *ngIf="i == ques_start">
+        <div class="que_text">
+          <span>
+            {{ question.question }}
+          </span>
+        </div>
+        <div class="option_list" [class.flex]="question.type==='picture'">
+          <div class="option" #option *ngFor="let option of question.answers; index as j"
+            (click)="optionSelected(i,j, option.status)">
+            <span *ngIf="question.type==='picture'; else nopicture" class="option_img">
+              <img [src]="option.name">
+            </span>
+            <ng-template #nopicture>
+              <span>{{ option.name }}</span>
+            </ng-template>
+            <mat-icon class="icon tick">check</mat-icon>
+            <mat-icon class="icon cross">close</mat-icon>
+            <mat-icon class="icon plus">control_point</mat-icon>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- footer -->
+    <footer>
+      <div class="total_que">
+        <span>
+          <p>{{ ques_start + 1 }}</p>
+          trên
+          <p>{{ ques_total }}</p>
+          Câu hỏi
+        </span>
+      </div>
+      <button type="button" mat-raised-button color="primary" (click)="nextQuestion()" [disabled]="!can_next_question">
+        {{ text_btn_next }}
+      </button>
+    </footer>
+  </div>
+
+  <div class="result_box" *ngIf="showResult">
+    <img src="../../../assets/result_bg.jpg" alt="" />
+    <div class="complete_text">Bạn đã hoàn thành bài kiểm tra!</div>
+    <div class="score_text">
+      <span>{{ result_slogan }}! {{ result_icon }},{{ client }} đạt
+        <p>{{ score }}</p>
+        trên tổng số
+        <p>{{ ques_total }}</p>
+      </span>
+    </div>
+    <div class="buttons">
+      <button mat-raised-button color="primary" routerLink="/">Kết thúc</button>
+    </div>
+  </div>
+</div>

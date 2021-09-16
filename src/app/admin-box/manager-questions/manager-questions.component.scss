@@ -1,32 +1,38 @@
-mat-expansion-panel{
-    margin: 10px 0;
-    width: 80%;
+:host {
+  width: 100%;
+  padding: 10px;
+  
+}
+.box-level{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  button{
+    min-height: 45.56px;
+  }
+  
+}
+.row{
+  width: 100%;
+  overflow: hidden;
 }
 
-:host{
-    width: 100%;
-    padding: 10px;
-}
-.answer{
-    display: flex;
-    align-items: center;
-}
 .question{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+  margin-bottom: 10px;
+  &:first-child{
+    margin-top: 10px;
+  }
+  .question-info{
+    flex: 1;
+  }
+  .question-btn{
     display: flex;
-    align-items: flex-start;
-    button{
-        width: 50px;
-        height: 36px;
-        padding: 0 16px;
-        margin: 10px  5px;
-    }
-}
-.group{
-    button{
-        margin: 0 10px;
-    }
-}
-
-.custom-input{
-    margin-right: 10px;
+    gap: 5px;
+    max-height: 48px;
+  }
 }

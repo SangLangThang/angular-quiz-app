@@ -1,24 +1,34 @@
-.container {
-    width: 100%;
-    min-height: 100vh;
-  }
-  
-  .sidenav-content {
-    display: flex;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .sidenav {
-    padding: 10px;
-  }
-  .quiz-btn {
-    display: block;
-    margin-top:20px;
-  }
- 
+.box {
+  min-height: calc(100vh - 110px);
+}
+.sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: flex-start;
+  flex-direction: column;
+}
+.title {
+  text-transform: uppercase;
+  font-weight: 600;
+  margin: 5px;
+}
+.sidenav {
+  padding: 10px;
+}
+.quiz-btn {
+  display: block;
+  margin-bottom: 20px;
+}
+.menu {
+  width: 100%;
+  overflow: hidden;
+  border-bottom: 1px solid black;
+  padding: 10px;
+}
+.active{
+  background-color: #0d6efd;
+  color: white;
+}
 @media only screen and (max-width: 600px) {
-  
- 
 }
