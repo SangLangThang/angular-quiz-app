@@ -6,11 +6,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class QuizBoxComponent implements OnInit {
   constructor() {}
-  showInfo: boolean = true;
-  showGame: boolean = false;
+ 
   ngOnInit(): void {}
-  startGame(){
-    this.showInfo=!this.showInfo;
-    this.showGame=!this.showGame
-  }
+  
 }

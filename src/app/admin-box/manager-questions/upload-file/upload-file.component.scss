@@ -1,0 +1,36 @@
+.wrapper {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background: #fff;
+  border-radius: 5px;
+  border: 1px dashed deeppink;
+  overflow: hidden;
+}
+.previewImg {
+  max-width: 100%;
+  height: auto;
+  transition: all 0.3s ease;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: #fff;
+  border-radius: 5px;
+}
+.btn-upload,
+.upload {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.btn-upload {
+  border: 1px solid green;
+}
+.upload {
+  width: 100px;
+  height: 100px;
+  opacity: 0;
+  z-index: 10;
+  cursor: pointer;
+}

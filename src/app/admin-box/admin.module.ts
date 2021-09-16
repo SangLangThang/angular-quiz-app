@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material-module';
-import { UploadFileComponent } from '../upload-file/upload-file.component';
+import { UploadFileComponent } from './manager-questions/upload-file/upload-file.component';
 import { AdminBoxComponent } from './admin-box.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { ManagerClientsComponent } from './manager-clients/manager-clients.component';

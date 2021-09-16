@@ -7,16 +7,26 @@
       <textarea matInput formControlName="question" [mat-autosize]="true"></textarea>
     </mat-form-field>
     <div class="group-btn">
-      <mat-checkbox formControlName="multiAnswer">Multi</mat-checkbox>
+      <div class="flex-center">
+        <mat-checkbox formControlName="multiAnswer"></mat-checkbox>
+        <mat-icon>storage</mat-icon>
+      </div>
+      <div class="flex-center">
+        <mat-checkbox formControlName="picture" (click)="havePicture=!havePicture"></mat-checkbox>
+        <mat-icon>camera_alt</mat-icon>
+      </div>
     </div>
   </div>
 
   <div formArrayName="answers" *ngFor="let answer of answers.controls; let i = index;">
     <div class="form-group" [formGroupName]="i">
-      <mat-form-field appearance="outline" class="custom-input">
+      <mat-form-field appearance="outline" class="custom-input" *ngIf="havePicture">
         <mat-label>Lựa chọn {{ i + 1 }}</mat-label>
         <textarea matInput formControlName="name" [mat-autosize]="true"></textarea>
       </mat-form-field>
+      <div class="form-img">
+        <app-upload-file *ngIf="havePicture"></app-upload-file>
+      </div>
       <div class="group-btn">
         <mat-checkbox formControlName="status"></mat-checkbox>
         <div class="hide_element" (click)="clearCheckbox(i)"></div>
@@ -37,10 +47,8 @@
     <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
       Reset
     </button>
-    <button mat-raised-button color="warn"[disabled]="true" (click)="questionForm.reset()" type="button">
+    <button mat-raised-button color="warn" [disabled]="true" (click)="questionForm.reset()" type="button">
       Huỷ bỏ
     </button>
   </div>
 </form>
-
-

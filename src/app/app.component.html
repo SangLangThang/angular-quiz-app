@@ -1,18 +1,12 @@
-<div class="container">
-  
-  <mat-toolbar color="primary" class="header">
+<div class="container-fluid box">
+
+  <div class="header">
     <img src="../assets/LOGO_CSG.svg" alt="" class="logo" />
-    <span class="slogan">Tìm hiểu kiến thức về ATGT</span>
     <span class="spacer"></span>
-    <a mat-raised-button color="primary" class="login-btn" routerLink="/"
-      >Làm bài</a
-    >
-    <a mat-raised-button color="primary" class="login-btn" routerLink="/login"
-      >Đăng nhập</a
-    >
-  </mat-toolbar>
+    <a mat-stroked-button color="primary" class="login-btn" routerLink="/">Trang chủ</a>
+    <a mat-raised-button color="primary" class="login-btn" routerLink="/login">Đăng nhập</a>
+  </div>
 
   <router-outlet></router-outlet>
+  <footer></footer>
 </div>
-
-

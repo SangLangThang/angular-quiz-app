@@ -1,0 +1,6 @@
+<div class="wrapper">
+    <span style="color:red;" *ngIf="message">{{message}}</span>
+    <input #file type="file" accept='image/*' (change)="preview($event)" class="upload" />
+    <button mat-raised-button class="btn-upload" color="primary">Upload</button>
+    <img [src]="imgURL" height="200" *ngIf="imgURL" class="previewImg">
+</div>

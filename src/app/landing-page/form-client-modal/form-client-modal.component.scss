@@ -1,0 +1,29 @@
+.form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 10px 0;
+    border: 5px;
+    margin: 0 auto;
+   
+  }
+  .title{
+      text-align: center;
+      font-weight: bold;
+  }
+  .custom-input{
+      width: 95%;
+  }
+  .float-right{
+      float: right;
+  }
+  .box-title{
+      display: flex;
+      align-items: center;
+      .load{
+          margin-bottom: 16px;
+          margin-left: 30px;
+      }
+  }

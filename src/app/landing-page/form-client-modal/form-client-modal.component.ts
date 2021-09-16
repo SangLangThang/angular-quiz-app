@@ -1,20 +1,25 @@
-import { ManagerQuestionsService } from './../shared/manager-questions.service';
-import { Component, OnInit } from '@angular/core';
+import { SessionService } from './../../shared/session.service';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Levels, Topics } from '../models/User.model';
-import { FirebaseService } from './../shared/firebase.service';
+import { Levels, Topics } from 'src/app/models/User.model';
+import { FirebaseService } from 'src/app/shared/firebase.service';
+import { MatDialog } from '@angular/material/dialog';
+
 @Component({
-  selector: 'app-start-box',
-  templateUrl: './start-box.component.html',
-  styleUrls: ['./start-box.component.scss'],
+  selector: 'app-form-client-modal',
+  templateUrl: './form-client-modal.component.html',
+  styleUrls: ['./form-client-modal.component.scss'],
 })
-export class StartBoxComponent implements OnInit {
+export class FormClientModalComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private firebase$: FirebaseService,
-    private router: Router
+    private router: Router,
+    private session$: SessionService,
+    private dialog: MatDialog
   ) {}
+  isCreating = false;
   clientForm: FormGroup;
   levels: Levels[] = [];
   topicsData: Topics[] = [];
@@ -23,6 +28,7 @@ export class StartBoxComponent implements OnInit {
 
   defaultTopic: string;
   ngOnInit(): void {
+    this.session$.clearSesstion();
     this.buildForm();
     this.firebase$.getLevels().subscribe((levels: any) => {
       console.log('get levels finish');
@@ -74,7 +80,7 @@ export class StartBoxComponent implements OnInit {
   onLevelChange(levelId: any) {
     this.topics = this.selectedTopics(levelId, this.topicsData);
   }
-
+  @Output() created = new EventEmitter();
   onSubmit() {
     const newClient = {
       ...this.clientForm.value,
@@ -83,15 +89,15 @@ export class StartBoxComponent implements OnInit {
       topicId: this.getNameTopic(this.clientForm.value.topicId),
       levelId: this.getNameLevel(this.clientForm.value.levelId),
     };
-    console.log(newClient);
-
+    this.isCreating = true;
+    this.session$.setClientTopicId(this.clientForm.value.topicId);
+    this.session$.setClientLevelId(this.clientForm.value.levelId);
     this.firebase$.addClient(newClient).then((value) => {
-      this.router.navigate([
-        'start',
-        value.id,
-        this.clientForm.value.levelId,
-        this.clientForm.value.topicId,
-      ]);
+      this.session$.setClientId(value.id);
+      this.isCreating = false;
+      this.firebase$.isCreatedClient=true
+      this.dialog.closeAll();
+      this.router.navigate(['play'])
     });
   }
 }

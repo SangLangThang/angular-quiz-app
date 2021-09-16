@@ -1,13 +1,36 @@
+import { SessionService } from './session.service';
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { take } from 'rxjs/operators';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { Observable } from 'rxjs';
+import { take,finalize } from 'rxjs/operators';
 import { ClientForm, ILogin, QuestionsForm } from '../models/User.model';
 @Injectable({
   providedIn: 'root',
 })
 export class FirebaseService {
-  constructor(private firestore: AngularFirestore) {}
+  constructor(
+    private firestore: AngularFirestore,
+    private storage: AngularFireStorage,
+    private session$:SessionService
+  ) {}
+  isCreatedClient=true;
 
+  downloadURL:string;
+  uploadFile(file:any) {
+    const filePath = 'sang';
+    const fileRef = this.storage.ref(filePath);
+    const task = this.storage.upload(filePath, file);
+    
+    task.snapshotChanges().pipe(
+      finalize(() => {
+        fileRef.getDownloadURL().subscribe(downloadURL => {
+          this.downloadURL=downloadURL
+          console.log(this.downloadURL)
+        });
+      })
+    )
+  }
   login(payload: ILogin) {
     return this.firestore
       .collection('users', (ref) =>
@@ -19,7 +42,7 @@ export class FirebaseService {
   }
 
   addClient(clientForm: ClientForm) {
-    return this.firestore.collection('clients').add(clientForm);
+   return this.firestore.collection('clients').add(clientForm)
   }
   getClients() {
     return this.firestore.collection('clients').valueChanges().pipe(take(1));

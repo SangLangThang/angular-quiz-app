@@ -1,3 +1,4 @@
+import { SessionService } from './../../shared/session.service';
 import {
   Component,
   ElementRef,
@@ -18,23 +19,26 @@ export class GameBoxComponent implements OnInit {
   constructor(
     private renderer: Renderer2,
     private routes: ActivatedRoute,
-    private firebase$: FirebaseService
+    private firebase$: FirebaseService,
+    private session$:SessionService
   ) {}
 
   @ViewChildren('option') options: QueryList<ElementRef>;
 
   ngOnInit(): void {
-    this.clientId = this.routes.snapshot.params['client'];
-    this.topicId = this.routes.snapshot.params['topic'];
+
+    this.clientId = this.session$.getClientId()
+    this.topicId = this.session$.getClientTopicId()
+    console.log('client',this.clientId)
+    console.log('topic',this.topicId)
     this.firebase$.getClient(this.clientId).subscribe((client: any) => {
       this.clientData = client;
       this.client = client.name;
     });
     this.firebase$.getQuestions(this.topicId).subscribe((questions: any) => {
       this.questions = questions;
-
       this.ques_total = questions.length;
-      this.startGame();
+      /* this.startGame(); */
     });
   }
   /* load data for game */

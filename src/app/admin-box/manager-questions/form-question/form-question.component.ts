@@ -22,6 +22,7 @@ export class FormQuestionComponent implements OnInit {
   dataFromSession: any;
   topicId: string;
   questionId: string;
+  havePicture=false;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -51,6 +52,7 @@ export class FormQuestionComponent implements OnInit {
     this.questionForm = this.fb.group({
       question: ['', Validators.required],
       multiAnswer: [false, Validators.required],
+      picture: [false, Validators.required],
       answers: new FormArray([this.createAnswer()]),
     });
   }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -12,23 +13,26 @@ import { DialogComponent } from './dialog/dialog.component';
 import { LoginBoxComponent } from './login-box/login-box.component';
 import { MaterialModule } from './material-module';
 import { GameBoxComponent } from './quiz-box/game-box/game-box.component';
-import { InfoBoxComponent } from './quiz-box/info-box/info-box.component';
 import { QuizBoxComponent } from './quiz-box/quiz-box.component';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
-import { StartBoxComponent } from './start-box/start-box.component';
-import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
-
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { LandingPageComponent } from './landing-page/landing-page.component';
+import { RulesModalComponent } from './landing-page/rules-modal/rules-modal.component';
+import { FormClientModalComponent } from './landing-page/form-client-modal/form-client-modal.component';
+import { LoadingComponent } from './loading/loading.component';
 @NgModule({
   declarations: [
     AppComponent,
-    StartBoxComponent,
     LoginBoxComponent,
 
     DialogComponent,
-    InfoBoxComponent,
     GameBoxComponent,
     QuizBoxComponent,
     SnackBarComponent,
+    LandingPageComponent,
+    RulesModalComponent,
+    FormClientModalComponent,
+    LoadingComponent,
   ],
   imports: [
     BrowserModule,
@@ -38,9 +42,9 @@ import { NgxExtendedPdfViewerModule } from 'ngx-extended-pdf-viewer';
     FormsModule,
     MaterialModule,
     AdminModule,
-    AngularFirestoreModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
-    NgxExtendedPdfViewerModule
+    AngularFirestoreModule,
+    AngularFireStorageModule
   ],
   providers: [],
   bootstrap: [AppComponent],
