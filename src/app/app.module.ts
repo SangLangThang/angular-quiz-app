@@ -10,7 +10,6 @@ import { AdminModule } from './admin-box/admin.module';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { DialogComponent } from './dialog/dialog.component';
-import { LoginBoxComponent } from './login-box/login-box.component';
 import { MaterialModule } from './material-module';
 import { GameBoxComponent } from './game-box/game-box.component';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
@@ -22,7 +21,6 @@ import { LoginModalComponent } from './landing-page/login-modal/login-modal.comp
 @NgModule({
   declarations: [
     AppComponent,
-    LoginBoxComponent,
 
     DialogComponent,
     GameBoxComponent,
@@ -42,7 +40,7 @@ import { LoginModalComponent } from './landing-page/login-modal/login-modal.comp
     AdminModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

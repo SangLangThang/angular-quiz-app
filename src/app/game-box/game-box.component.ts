@@ -53,7 +53,7 @@ export class GameBoxComponent implements OnInit {
   topicId: string;
   clientData: ClientForm;
   text_btn_next = 'Câu tiếp theo';
-  time_start = 5;
+  time_start = 15;
   percent = '0%';
   ques_start = 0;
   hasSelected: { index: number; status: boolean }[] = [];
@@ -66,11 +66,11 @@ export class GameBoxComponent implements OnInit {
   can_next_question = false;
   /* game function */
   startGame() {
-    this.time_start = 5;
+    this.time_start = 15;
     this.percent = '0%';
     this.start = setInterval(() => {
       this.time_start--;
-      this.percent = `${((5 - this.time_start) * 100) / 5}%`;
+      this.percent = `${((5 - this.time_start) * 100) / 15}%`;
       if (this.time_start === 0) {
         clearInterval(this.start);
         this.optionSelected(this.ques_start,1000, false);
