@@ -1,55 +1,59 @@
-<div class="box-title">
-    <h1 mat-dialog-title class="title">Tạo thông tin đăng ký</h1>
-    <mat-spinner [diameter]="20"class="load" *ngIf="isCreating"></mat-spinner>
-</div>
+<div class="col-12 col-md-8 box">
 
-<div mat-dialog-content class="box-form">
-    <form class="form" [formGroup]="clientForm">
-        <mat-form-field class="full-width" appearance="outline" class="col-lg-8 col-12">
-            <mat-label>Họ và Tên</mat-label>
-            <input type="text" matInput formControlName="name" />
-        </mat-form-field>
-        <div class="col-lg-8 col-12 custom-flex">
-            <div class="col-12 col-md-6">
-                <mat-form-field appearance="outline" class="custom-input">
-                    <mat-label>Trường</mat-label>
-                    <input type="text" matInput formControlName="school" />
-                </mat-form-field>
+    <div class="box-title">
+        <h1 mat-dialog-title class="title">Tạo thông tin đăng ký</h1>
+        <mat-spinner [diameter]="20" class="load" *ngIf="isCreating"></mat-spinner>
+    </div>
+    <div mat-dialog-content class="box-form">
+        <form class="form" [formGroup]="clientForm">
+            <mat-form-field class="full-width" appearance="outline" class="col-md-8 col-12">
+                <mat-label>Họ và Tên</mat-label>
+                <input type="text" matInput formControlName="name" />
+            </mat-form-field>
+            <div class="col-md-8 col-12 custom-flex">
+                <div class="col-12 col-md-6">
+                    <mat-form-field appearance="outline" class="custom-input">
+                        <mat-label>Trường</mat-label>
+                        <input type="text" matInput formControlName="school" />
+                    </mat-form-field>
+                </div>
+                <div class="col-12 col-md-6">
+                    <mat-form-field appearance="outline" class="custom-input float-right">
+                        <mat-label>Lớp</mat-label>
+                        <input type="text" matInput formControlName="class" />
+                    </mat-form-field>
+                </div>
             </div>
-            <div class="col-12 col-md-6">
-                <mat-form-field appearance="outline" class="custom-input float-right">
-                    <mat-label>Lớp</mat-label>
-                    <input type="text" matInput formControlName="class" />
-                </mat-form-field>
-            </div>
-        </div>
-        <div class="col-lg-8 col-12 d-flex">
-            <div class="col-6 ">
-                <mat-form-field appearance="outline" class="custom-input">
-                    <mat-label>Cấp</mat-label>
-                    <mat-select formControlName="levelId" (valueChange)="onLevelChange($event)">
-                        <mat-option *ngFor="let level of levels" [value]="level.levelId">
-                            {{level.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
-            <div class="col-6">
-                <mat-form-field appearance="outline" class="custom-input float-right">
-                    <mat-label>Bộ đề</mat-label>
-                    <mat-select formControlName="topicId">
-                        <mat-option *ngFor="let topic of topics" [value]="topic.topicId">
-                            {{ topic.name }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </div>
+            <div class="col-md-8 col-12 d-flex">
+                <div class="col-6 ">
+                    <mat-form-field appearance="outline" class="custom-input">
+                        <mat-label>Cấp</mat-label>
+                        <mat-select formControlName="levelId" (valueChange)="onLevelChange($event)">
+                            <mat-option *ngFor="let level of levels" [value]="level.levelId">
+                                {{level.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col-6">
+                    <mat-form-field appearance="outline" class="custom-input float-right">
+                        <mat-label>Bộ đề</mat-label>
+                        <mat-select formControlName="topicId">
+                            <mat-option *ngFor="let topic of topics" [value]="topic.topicId">
+                                {{ topic.name }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
 
-        </div>
-        <div mat-dialog-actions>
-            <button mat-button mat-dialog-close>Quay lại</button>
-            <button mat-raised-button color="primary" [disabled]="clientForm.invalid" type="submit" class="start-btn"
-                (click)="onSubmit()">Bắt đầu</button>
-        </div>
-    </form>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-button mat-dialog-close>Quay lại</button>
+                <button mat-raised-button color="primary" [disabled]="clientForm.invalid" type="submit"
+                    class="start-btn" (click)="onSubmit()">Bắt đầu</button>
+            </div>
+        </form>
+    </div>
+
+
 </div>

@@ -1,3 +1,16 @@
+.box {
+  background-color: #fff;
+  margin: 0 auto;
+  padding: 15px 0px;
+  border-radius: 5px;
+}
+.box-form {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  margin: 0 auto;
+  padding: 5px;
+}
 .form {
   width: 100%;
   display: flex;
@@ -30,11 +43,7 @@
     margin-left: 30px;
   }
 }
-.box-form {
-  height: 100%;
-  width: 100%;
-  margin: 0 auto;
-}
+
 @media only screen and (max-width: 760px) {
   .custom-flex {
     flex-direction: column;

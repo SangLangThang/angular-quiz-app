@@ -16,12 +16,17 @@ export class LandingPageComponent implements OnInit {
   ngOnInit(): void {
     this.session$.clearSesstion()
   }
+
   openRules(){
-    this.dialog.open(RulesModalComponent)
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.panelClass="dialog-login"
+    dialogConfig.maxWidth='100vw'
+    this.dialog.open(RulesModalComponent,dialogConfig)
   }
   openFormClient(){
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width='100%';
+    dialogConfig.panelClass="dialog-login"
+    dialogConfig.maxWidth='100vw'
     dialogConfig.height='80vh';
     this.dialog.open(FormClientModalComponent,dialogConfig)
   }
