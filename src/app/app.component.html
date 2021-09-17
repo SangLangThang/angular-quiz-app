@@ -1,16 +1,24 @@
 <div class=" box">
-
   <div class="header">
-    <img src="../assets/LOGO_CSG.svg" alt="" class="logo" />
-    <span class="spacer">công an tx sông cầu</span>
-    <a mat-stroked-button color="primary" class="login-btn" routerLink="/">Trang chủ</a>
-    <a mat-raised-button color="primary" class="login-btn" (click)="openDialog()">Đăng nhập</a>
+    <div class="header-logo">
+      <img src="../assets/LOGO_CSG.svg" alt="" class="logo" />
+      <h2 class="title">
+        công an <br> tx sông cầu
+      </h2>
+    </div>
+    <div class="header-button">
+      <a mat-stroked-button color="primary" class="login-btn" routerLink="/">Trang chủ</a>
+      <a mat-raised-button color="primary" class="login-btn" (click)="openDialog()">Đăng nhập</a>
 
-    <button class="toggle" mat-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item routerLink="/">Trang chủ</button>
-      <button mat-menu-item (click)="openDialog()">Đăng nhập</button>
-    </mat-menu>
+      <button class="toggle" mat-button [matMenuTriggerFor]="menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item routerLink="/">Trang chủ</button>
+        <button mat-menu-item (click)="openDialog()">Đăng nhập</button>
+      </mat-menu>
+    </div>
+
   </div>
 
   <router-outlet></router-outlet>
