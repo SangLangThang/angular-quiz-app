@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminBoxComponent } from './admin-box.component';
 import { ManagerClientsComponent } from './manager-clients/manager-clients.component';
 import { FormQuestionComponent } from './manager-questions/form-question/form-question.component';
-import { FormTopicsComponent } from './manager-questions/form-topics/form-topics.component';
 import { ManagerQuestionsComponent } from './manager-questions/manager-questions.component';
 
 const adminRoutes: Routes = [
@@ -19,10 +18,6 @@ const adminRoutes: Routes = [
       {
         path: 'questions/new',
         component: FormQuestionComponent,
-      },
-      {
-        path: 'questions/topics',
-        component: FormTopicsComponent,
       },
       { path: 'questions/edit', component: FormQuestionComponent },
       { path: 'clients', component: ManagerClientsComponent },

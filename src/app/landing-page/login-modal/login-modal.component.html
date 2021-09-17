@@ -1,5 +1,5 @@
 
-<div class="col-12 col-md-8 box">
+<div class="col-12 col-sm-6 col-lg-4 col-xxl-3 box">
     <div class="box-title">
         <h2 mat-dialog-title class="title">Phần này chỉ dành cho giáo viên</h2>
         <mat-spinner [diameter]="20" class="load" *ngIf="isLoging"></mat-spinner>
@@ -8,11 +8,11 @@
     <div mat-dialog-content class="box-form">
         <form [formGroup]="formGroup" (ngSubmit)="onSubmit(formGroup.value)" class="form col-12">
             <div class="row">
-                <mat-form-field appearance="outline" class="col-md-6 col-12">
+                <mat-form-field appearance="outline" class="col-12 ">
                     <mat-label>Tài khoản</mat-label>
                     <input type="text" matInput formControlName="username" />
                 </mat-form-field>
-                <mat-form-field appearance="outline" class="col-md-6 col-12">
+                <mat-form-field appearance="outline" class="col-12">
                     <mat-label>Mật khẩu</mat-label>
                     <input type="password" matInput formControlName="password" />
                 </mat-form-field>

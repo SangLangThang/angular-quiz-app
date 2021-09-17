@@ -1,18 +1,19 @@
 <mat-drawer-container class="box" autosize>
-  <mat-drawer #drawer class="sidenav" mode="side">
-    <a routerLink="questions" routerLinkActive="active" mat-raised-button class="quiz-btn" (click)="title='Quản lý câu hỏi'">
-      <mat-icon>question_answer</mat-icon> Quản lý câu hỏi
-    </a> 
-    <a routerLink="clients"  routerLinkActive="active" mat-raised-button class="quiz-btn" (click)="title='Danh sách thi'">
-      <mat-icon>supervised_user_circle</mat-icon> Danh sách thi
+  <mat-drawer #drawer class="sidenav" mode="side" opened>
+    <a routerLink="questions" routerLinkActive="active" mat-raised-button class="quiz-btn"
+      (click)="title='Quản lý câu hỏi'">
+      <mat-icon>question_answer</mat-icon> <span class="text">Quản lý câu hỏi</span>
+    </a>
+    <a routerLink="clients" routerLinkActive="active" mat-raised-button class="quiz-btn"
+      (click)="title='Danh sách thi'">
+      <mat-icon>supervised_user_circle</mat-icon>
+      <span class="text">Danh sách thi</span>
     </a>
   </mat-drawer>
 
   <div class="sidenav-content">
     <div class="menu">
-      <button type="button" mat-raised-button color="primary" (click)="drawer.toggle()" >
-        Menu
-      </button>
+      <img src="../../assets/favicon-32x32.png" alt="">
       <span class="title p-3">{{title}}</span>
     </div>
     <router-outlet></router-outlet>

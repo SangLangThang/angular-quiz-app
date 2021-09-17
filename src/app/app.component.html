@@ -7,20 +7,18 @@
       </h2>
     </div>
     <div class="header-button">
-      <a mat-stroked-button color="primary" class="login-btn" routerLink="/">Trang chủ</a>
-      <a mat-raised-button color="primary" class="login-btn" (click)="openDialog()">Đăng nhập</a>
-
-      <button class="toggle" mat-button [matMenuTriggerFor]="menu">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="/">Trang chủ</button>
-        <button mat-menu-item (click)="openDialog()">Đăng nhập</button>
-      </mat-menu>
+      <a mat-button  class="home-btn" routerLink="/">
+        <mat-icon>home</mat-icon>
+        <span class='text'>Trang chủ</span>
+        
+      </a>
+      <a mat-raised-button color="primary" class="login-btn" (click)="openDialog()">
+        <mat-icon> person_pin</mat-icon>
+        <span class='text'>Đăng nhập</span>
+      </a>
     </div>
 
   </div>
 
   <router-outlet></router-outlet>
-  <footer></footer>
 </div>

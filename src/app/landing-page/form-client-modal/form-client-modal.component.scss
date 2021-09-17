@@ -1,7 +1,7 @@
 .box {
   background-color: #fff;
   margin: 0 auto;
-  padding: 15px 0px;
+  
   border-radius: 5px;
 }
 .box-form {
@@ -9,7 +9,7 @@
   width: 100%;
   overflow: hidden;
   margin: 0 auto;
-  padding: 5px;
+  padding: 20px 30px;
 }
 .form {
   width: 100%;
@@ -17,11 +17,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  padding: 10px 0;
   border: 5px;
   margin: 0 auto;
 }
 .title {
+  padding-top:10px ;
   text-align: center;
   font-weight: bold;
 }
@@ -45,6 +45,10 @@
 }
 
 @media only screen and (max-width: 760px) {
+  .box-form {
+    
+    padding: 20px 5px;
+  }
   .custom-flex {
     flex-direction: column;
     .custom-input {

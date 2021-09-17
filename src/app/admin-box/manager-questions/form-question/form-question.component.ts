@@ -33,7 +33,7 @@ export class FormQuestionComponent implements OnInit {
       this.questionId = this.dataFromSession.questionId;
       this.updateForm(this.dataFromSession);
     } else {
-      this.topicId = this.session$.getTopic().topicId;
+      this.topicId = this.session$.getTopic();
     }
   }
 

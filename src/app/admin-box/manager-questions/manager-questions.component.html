@@ -8,13 +8,18 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <button mat-raised-button color="primary" [routerLink]="['topics']" class="col-2">Thêm
+    <mat-form-field class="col-2" appearance="outline" >
+      <mat-label>Tên đề</mat-label>
+      <input type="text" matInput  [(ngModel)]="inputTopicName" />
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" [disabled]="inputTopicName.length<=0" (click)="addTopic()" class="col-2">Thêm
       đề</button>
     <button mat-raised-button color="primary" [disabled]="!canDelTopic" (click)="deleteTopic()" class="col-2">Xoá
       đề</button>
   </div>
   <div class=" row py-1">
-    <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
+    <mat-tab-group  (selectedTabChange)="topicChanged($event)" [selectedIndex]="currentTopicIndex">
       <div *ngIf="topics">
         <mat-tab [label]="topic.name" [aria-label]="topic.topicId" *ngFor="let topic of topics;">
           <div *ngIf="questions">
@@ -37,7 +42,7 @@
               </div>
             </div>
           </div>
-          <button mat-raised-button class="mt-2" color="primary" [routerLink]="['new']">Thêm</button>
+          <button mat-raised-button class="mt-2" color="primary" (click)="newQuestion()">Thêm</button>
         </mat-tab>
       </div>
     </mat-tab-group>

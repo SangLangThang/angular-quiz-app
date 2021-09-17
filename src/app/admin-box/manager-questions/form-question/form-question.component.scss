@@ -1,10 +1,10 @@
 
 .hide_element{
   position: absolute;
-  top: 0;
-  left: -10px;
-  width: 40px;
-  height: 40px;
+  top: 10px;
+  right: 80px;
+  width: 35px;
+  height: 35px;
   z-index: 2;
   border-radius: 50%;
   cursor: pointer;
@@ -24,6 +24,7 @@
   justify-content: space-between;
   gap: 5px;
   margin-bottom: 10px;
+  position: relative;
   &:first-child{
     margin-top: 10px;
   }

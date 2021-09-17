@@ -27,7 +27,7 @@ export class LandingPageComponent implements OnInit {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.panelClass="dialog-login"
     dialogConfig.maxWidth='100vw'
-    dialogConfig.height='80vh';
+    dialogConfig.height='60vh';
     this.dialog.open(FormClientModalComponent,dialogConfig)
   }
   

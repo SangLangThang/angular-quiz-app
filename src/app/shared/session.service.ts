@@ -48,4 +48,17 @@ export class SessionService {
   getQuestion(){
     return JSON.parse(this.storage.getItem('question')||'')
   }
+  setTopicIndex(index:number){
+    this.storage.setItem('topicIndex',JSON.stringify(index));
+  }
+  getTopicIndex(){
+    return JSON.parse(this.storage.getItem('topicIndex')||'')
+  }
+  setStartEditQuestion(status:string){
+    this.storage.setItem('edit',JSON.stringify(status));
+  }
+  getStartEditQuestion(){
+    return JSON.parse(this.storage.getItem('edit')||'')
+  }
+
 }

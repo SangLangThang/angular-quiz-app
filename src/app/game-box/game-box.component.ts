@@ -37,7 +37,9 @@ export class GameBoxComponent implements OnInit {
     this.firebase$.getQuestions(this.topicId).subscribe((questions: any) => {
       this.questions = questions;
       this.ques_total = questions.length;
-      /* this.startGame(); */
+      if(this.ques_total>0){
+        this.startGame();
+      }
     });
   }
   /* UI */

@@ -12,7 +12,7 @@ export class FirebaseService {
     private storage: AngularFireStorage
   ) {}
   isCreatedClient = false;
-  isLogin = false;
+  isLogin = true;
 
   downloadURL: string;
   uploadFile(file: any) {
