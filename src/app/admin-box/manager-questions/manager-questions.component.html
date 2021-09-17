@@ -10,6 +10,8 @@
     </mat-form-field>
     <button mat-raised-button color="primary" [routerLink]="['topics']" class="col-2">Thêm
       đề</button>
+    <button mat-raised-button color="primary" [disabled]="!canDelTopic" (click)="deleteTopic()" class="col-2">Xoá
+      đề</button>
   </div>
   <div class=" row py-1">
     <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
@@ -31,7 +33,7 @@
               </div>
               <div class="question-btn">
                 <button mat-raised-button color="primary" (click)="editQuestion(question)">Sửa</button>
-                <button mat-raised-button color="warn" [disabled]="true" (click)="deleteQuestion('f')">Xoá</button>
+                <button mat-raised-button color="warn" (click)="deleteQuestion(question.questionId)">Xoá</button>
               </div>
             </div>
           </div>

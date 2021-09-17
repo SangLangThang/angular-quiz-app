@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { Levels, Topics } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { MatDialog } from '@angular/material/dialog';
+import { SortDataService } from 'src/app/shared/sort-data.service';
 
 @Component({
   selector: 'app-form-client-modal',
@@ -17,14 +18,15 @@ export class FormClientModalComponent implements OnInit {
     private firebase$: FirebaseService,
     private router: Router,
     private session$: SessionService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private sortData$: SortDataService
   ) {}
   isCreating = false;
   clientForm: FormGroup;
   levels: Levels[] = [];
   topicsData: Topics[] = [];
   topics: Topics[] = [];
-  defaultLevel: string;
+  currentLevelId: string;
 
   defaultTopic: string;
   ngOnInit(): void {
@@ -32,15 +34,15 @@ export class FormClientModalComponent implements OnInit {
     this.buildForm();
     this.firebase$.getLevels().subscribe((levels: any) => {
       console.log('get levels finish');
-      this.levels = levels;
-      this.defaultLevel = this.levels[2].levelId;
-      this.clientForm.get('levelId')?.setValue(this.defaultLevel);
+      this.levels = this.sortData$.sortLevel(levels);;
+      this.currentLevelId = this.levels[0].levelId;
+      this.clientForm.get('levelId')?.setValue(this.currentLevelId);
       //use 2 because levels[2]={name:Cấp 1}
     });
     this.firebase$.getTopics().subscribe((topics: any) => {
       console.log('get topics finish');
-      this.topicsData = topics;
-      this.topics = this.selectedTopics(this.defaultLevel, this.topicsData);
+      this.topicsData = this.sortData$.sortTopic(topics);
+      this.topics = this.selectedTopics(this.currentLevelId, this.topicsData);
       this.clientForm.get('topicId')?.setValue(this.topics[0].topicId);
     });
   }

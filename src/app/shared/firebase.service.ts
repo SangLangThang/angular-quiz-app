@@ -9,25 +9,25 @@ import { ClientForm, ILogin, QuestionsForm } from '../models/User.model';
 export class FirebaseService {
   constructor(
     private firestore: AngularFirestore,
-    private storage: AngularFireStorage,
+    private storage: AngularFireStorage
   ) {}
-  isCreatedClient=false;
-  isLogin=false;
+  isCreatedClient = false;
+  isLogin = false;
 
-  downloadURL:string;
-  uploadFile(file:any) {
+  downloadURL: string;
+  uploadFile(file: any) {
     const filePath = 'sang';
     const fileRef = this.storage.ref(filePath);
     const task = this.storage.upload(filePath, file);
-    
+
     task.snapshotChanges().pipe(
       finalize(() => {
-        fileRef.getDownloadURL().subscribe(downloadURL => {
-          this.downloadURL=downloadURL
-          console.log(this.downloadURL)
+        fileRef.getDownloadURL().subscribe((downloadURL) => {
+          this.downloadURL = downloadURL;
+          console.log(this.downloadURL);
         });
       })
-    )
+    );
   }
   login(payload: ILogin) {
     return this.firestore
@@ -36,11 +36,12 @@ export class FirebaseService {
           .where('username', '==', payload.username)
           .where('password', '==', payload.password)
       )
-      .valueChanges().pipe(take(1));
+      .valueChanges()
+      .pipe(take(1));
   }
 
   addClient(clientForm: ClientForm) {
-   return this.firestore.collection('clients').add(clientForm)
+    return this.firestore.collection('clients').add(clientForm);
   }
   getClients() {
     return this.firestore.collection('clients').valueChanges().pipe(take(1));
@@ -86,6 +87,9 @@ export class FirebaseService {
       .collection('topics')
       .add({ name: name, levelId: levelId });
   }
+  deleteTopic(topicId: string) {
+    return this.firestore.collection('topics').doc(topicId).delete();
+  }
 
   getQuestions(topicId: string) {
     return this.firestore
@@ -97,8 +101,9 @@ export class FirebaseService {
     return this.firestore.collection('questions').doc(id).valueChanges();
   }
 
-  deleteQuestion(questionId: string) {}
-
+  deleteQuestion(questionId: string) {
+    return this.firestore.collection('questions').doc(questionId).delete();
+  }
   addQuestions(questions: QuestionsForm) {
     return this.firestore.collection('questions').add(questions);
   }

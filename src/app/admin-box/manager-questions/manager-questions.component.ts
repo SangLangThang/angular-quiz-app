@@ -21,9 +21,11 @@ export class ManagerQuestionsComponent implements OnInit {
   showFormQuestion: boolean = false;
   selectValue: string = '';
 
-  currentLevelId:string;
-  currentTopicId: string;
-  currentIndexTab = 0;
+  currentLevelId:string='';
+  currentTopicId: string='';
+  currentIndexTab:number = 0;
+
+  canDelTopic=false
   constructor(
     private firebase$: FirebaseService,
     private router: Router,
@@ -31,7 +33,6 @@ export class ManagerQuestionsComponent implements OnInit {
     private sortData$: SortDataService
   ) {}
   ngOnInit(): void {
-    console.log('init manager question');
     this.startManager();
   }
 
@@ -41,7 +42,7 @@ export class ManagerQuestionsComponent implements OnInit {
     this.firebase$.getLevels().subscribe((levels: any) => {
       console.log('get levels ok');
       this.levels = this.sortData$.sortLevel(levels);
-      this.currentLevelId = this.levels[0].levelId;
+      this.currentLevelId===''? this.currentLevelId=this.levels[0].levelId:this.currentLevelId
       this.session$.setLevel(this.getLevelWithLevelId(this.currentLevelId,this.levels));
     });
     //use get all topics because get levels have delay=> cannot get topic with levelID
@@ -54,6 +55,15 @@ export class ManagerQuestionsComponent implements OnInit {
 
   selectedTopics(levelId: string, topics: Topics[]): Topics[] {
     return topics.filter((topic) => topic.levelId === levelId);
+  }
+  checkCanDelTopic(topicId?:string):boolean{
+    let data=this.questions.filter((question:QuestionsForm)=>{
+      return question.topicId===topicId
+    })
+    if(data.length===0){
+      return true
+    }
+    return false
   }
   getLevelWithLevelId(levelId: string, levels: Levels[]) {
     let newLevel = [...levels];
@@ -88,11 +98,13 @@ export class ManagerQuestionsComponent implements OnInit {
       this.currentIndexTab = tabChangeEvent.index;
       this.currentTopicId = tabChangeEvent.tab.ariaLabel;
       this.session$.setTopic(this.topics[this.currentIndexTab]);
+      
       this.firebase$
         .getQuestions(this.currentTopicId)
         .subscribe((questions: any) => {
           console.log('get questions ok');
           this.questions = questions;
+          this.canDelTopic=this.checkCanDelTopic(this.currentTopicId)
         });
     }
   }
@@ -101,8 +113,25 @@ export class ManagerQuestionsComponent implements OnInit {
     this.session$.setQuestion(question);
     this.router.navigate(['/admin/questions/edit']);
   }
+  deleteTopic() {
+    this.topics=[]
+    this.firebase$.deleteTopic(this.currentTopicId).then(value=>{
+      this.firebase$.getTopics().subscribe((topics: any) => {
+        console.log('get topics ok');
+        this.topicsData = this.sortData$.sortTopic(topics);
+        this.topics = this.selectedTopics(this.currentLevelId, this.topicsData);
+      });
+    })
+  }
 
   deleteQuestion(questionId: string) {
-    console.log(questionId);
+    this.topics=[]
+    this.firebase$.deleteQuestion(questionId).then((value) => {
+      this.firebase$.getTopics().subscribe((topics: any) => {
+        console.log('get topics ok');
+        this.topicsData = this.sortData$.sortTopic(topics);
+        this.topics = this.selectedTopics(this.currentLevelId, this.topicsData);
+      });
+    });
   }
 }

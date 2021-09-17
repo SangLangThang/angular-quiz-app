@@ -1,35 +1,45 @@
 .form {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: 10px 0;
+  border: 5px;
+  margin: 0 auto;
+}
+.title {
+  text-align: center;
+  font-weight: bold;
+}
+.custom-flex {
+  display: flex;
+}
+.custom-input {
+  width: 95%;
+}
+.float-right {
+  float: right;
+}
+.box-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .load {
+    margin-bottom: 16px;
+    margin-left: 30px;
+  }
+}
+.box-form {
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+@media only screen and (max-width: 760px) {
+  .custom-flex {
     flex-direction: column;
-    padding: 10px 0;
-    border: 5px;
-    margin: 0 auto;
-   
+    .custom-input {
+      width: 100%;
+    }
   }
-  .title{
-      text-align: center;
-      font-weight: bold;
-  }
-  .custom-input{
-      width: 95%;
-  }
-  .float-right{
-      float: right;
-  }
-  .box-title{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .load{
-          margin-bottom: 16px;
-          margin-left: 30px;
-      }
-  }
-.box-form{
-    height: 100%;
-    width: 100%;
-    margin: 0 auto;
 }

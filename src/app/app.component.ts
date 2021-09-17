@@ -13,7 +13,7 @@ export class AppComponent {
   }
   openDialog(){
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.width='50%';
+    dialogConfig.width='80%';
     this.dialog.open(LoginModalComponent,dialogConfig)
   }
 }

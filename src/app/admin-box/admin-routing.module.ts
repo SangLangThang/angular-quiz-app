@@ -12,6 +12,11 @@ const adminRoutes: Routes = [
     component: AdminBoxComponent,
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'questions',
+      },
+      {
         path: 'questions/new',
         component: FormQuestionComponent,
       },
