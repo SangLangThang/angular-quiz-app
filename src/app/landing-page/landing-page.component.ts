@@ -30,5 +30,8 @@ export class LandingPageComponent implements OnInit {
     dialogConfig.height='60vh';
     this.dialog.open(FormClientModalComponent,dialogConfig)
   }
-  
+
+  getDateTime() {
+    return new Date();
+  }
 }

@@ -44,7 +44,7 @@ export class FirebaseService {
     return this.firestore.collection('clients').add(clientForm);
   }
   getClients() {
-    return this.firestore.collection('clients').valueChanges().pipe(take(1));
+    return this.firestore.collection('clients').valueChanges({ idField: 'id' });
   }
   getClient(clientId: string) {
     return this.firestore
@@ -52,6 +52,9 @@ export class FirebaseService {
       .doc(clientId)
       .valueChanges()
       .pipe(take(1));
+  }
+  deleteClient(clientId: string) {
+    return this.firestore.collection('clients').doc(clientId).delete();
   }
   updateClient(clientId: string, score: number, time: number) {
     this.firestore
@@ -75,6 +78,11 @@ export class FirebaseService {
       .collection('topics')
       .valueChanges({ idField: 'topicId' })
       .pipe(take(1));
+  }
+  getTopicsWithLevelId(levelId: string) {
+    return this.firestore
+      .collection('topics', (ref) => ref.where('levelId', '==', levelId))
+      .valueChanges({ idField: 'topicId' });
   }
   getTopicsWithId(id: string) {
     return this.firestore

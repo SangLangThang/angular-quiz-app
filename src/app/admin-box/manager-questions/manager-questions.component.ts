@@ -1,10 +1,7 @@
-import { SortDataService } from './../../shared/sort-data.service';
-import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { Router } from '@angular/router';
 import { Levels, QuestionsForm, Topics } from 'src/app/models/User.model';
 import { FirebaseService } from './../../shared/firebase.service';
-import { SessionService } from './../../shared/session.service';
 
 @Component({
   selector: 'app-manager-questions',
@@ -12,127 +9,79 @@ import { SessionService } from './../../shared/session.service';
   styleUrls: ['./manager-questions.component.scss'],
 })
 export class ManagerQuestionsComponent implements OnInit {
-  @ViewChildren('test') test:QueryList<ElementRef>
   levels: Levels[];
   topicsData: Topics[];
   topics: Topics[];
-
   questions: QuestionsForm[];
   showQuestion: boolean = true;
   showFormQuestion: boolean = false;
   selectValue: string = '';
-
-  currentLevelId: string = '';
-  currentTopicId: string = '';
-
+  currentLevelId: string;
+  currentTopicId: string;
   currentTopicIndex: number = 0;
   lastTopicIndex: number = 0;
-
   canDelTopic = false;
   inputTopicName: string = '';
-
   changedIndexTopicByMat=false;
+  tabIndex: number;
 
   constructor(
-    private firebase$: FirebaseService,
-    private router: Router,
-    private session$: SessionService,
-    private sortData$: SortDataService
+    private firebase$: FirebaseService
   ) {}
+
   ngOnInit(): void {
     this.getLevels();
-    this.getTopics();
-  }
-  
-  private getLevels(indexLevel: number = 0) {
-    this.firebase$.getLevels().subscribe((levels: any) => {
-      this.levels = this.sortData$.sortLevel(levels);
-      this.currentLevelId = this.levels[indexLevel].levelId;
-    });
   }
 
-  private getTopics(levelId?:string) {
-    this.firebase$.getTopics().subscribe((topics: any) => {
-      this.topicsData = topics;
-      this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
-      this.topics = this.sortData$.sortTopic(this.topics);
-    });
-  }
-  private updateListTopics(topics: Topics) {
-    this.topicsData.push(topics);
-    this.topics.push(topics);
-    this.topics = this.sortData$.sortTopic(this.topics);
-  }
-  private deleteListTopics(topicId: string, index: number) {
-    this.topics.splice(index, 1);
-    this.topicsData.forEach((e, i) => {
-      if (e.topicId === topicId) {
-        this.topicsData.splice(i, 1);
-        return;
-      }
-    });
-  }
-  private getQuestions(topicId: string) {
-    this.firebase$.getQuestions(topicId).subscribe((questions: any) => {
-      this.questions = questions;
-      this.canDelTopic = this.questions.length > 0 ? false : true;
-      
-    });
-  }
-  onChangedLevel(levelId: string) {
-    this.currentLevelId = levelId;
-    this.topics = this.filterTopic(levelId, this.topicsData);
-    this.questions=[]
-    if(this.topics.length>0){
-      this.getQuestions(this.topics[this.currentTopicIndex].topicId);
-    }
-  }
-
-  topicChanged(topic: MatTabChangeEvent): void {
-    this.lastTopicIndex=this.currentTopicIndex
-    if (this.topics.length > 0) {
-      this.getQuestions(topic.tab.ariaLabel);
-      this.currentTopicId = topic.tab.ariaLabel;
-      this.currentTopicIndex = topic.index;
-      console.log(this.test)
-    }
-  }
-  addTopic() {
-    this.topicsData=[]
-    this.topics=[]
-    this.questions=[]
-    this.firebase$
-      .addTopic(this.currentLevelId, this.inputTopicName)
-      .then((value) => {
-        this.getTopics()
-        this.inputTopicName=''
+  getLevels() {
+    this.firebase$.getLevels()
+      .subscribe((levels: any[]) => {
+        this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));;
+        this.currentLevelId = this.levels[0].levelId;
+        this.getTopics();
       });
   }
+
+  getTopics() {
+    this.firebase$.getTopicsWithLevelId(this.currentLevelId)
+      .subscribe((topics: any[]) => {
+        this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));;
+        this.currentTopicId = this.topics[0].topicId
+        this.getQuestions();
+      });
+  }
+
+  getQuestions() {
+    this.firebase$.getQuestions(this.currentTopicId)
+      .subscribe((questions: any[]) => {
+        this.questions = questions.sort((a, b) => (a.name < b.name ? -1 : 1));;
+      });
+  }
+
+  addTopic() {
+    this.firebase$
+      .addTopic(this.currentLevelId, this.inputTopicName)
+      .then(_ => {
+        this.getTopics()
+        this.inputTopicName = ''
+      });
+  }
+
+  tabChange(topic: MatTabChangeEvent) {
+    this.currentTopicId = topic.tab.ariaLabel;
+    this.getQuestions();
+  }
+
   deleteTopic() {
-    this.topicsData=[]
-    this.topics=[]
-    this.questions=[]
-    this.firebase$.deleteTopic(this.currentTopicId).then((value: any) => {
-      this.getTopics()
-    });
-  }
-
-  filterTopic(levelId: string, topics: Topics[]): Topics[] {
-    return topics.filter((topic) => topic.levelId === levelId);
-  }
-
-  getLevelWithLevelId(levelId: string, levels: Levels[]) {
-    let newLevel = [...levels];
-    return newLevel.filter((e) => e.levelId === levelId)[0];
+    this.firebase$.deleteTopic(this.currentTopicId)
+      .then(_ => {
+        this.tabIndex = 0;
+        this.getTopics();
+      });
   }
 
   deleteQuestion(questionId: string) {
-    this.topics = [];
-    this.firebase$.deleteQuestion(questionId).then((value) => {
-      this.firebase$.getTopics().subscribe((topics: any) => {
-        this.topicsData = this.sortData$.sortTopic(topics);
-        this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
-      });
-    });
+    this.firebase$.deleteQuestion(questionId)
+    .then(_ => this.getQuestions());
   }
 }

@@ -43,3 +43,16 @@ button {
     border: none;
   }
 }
+
+@media only screen and (max-width: 767px) {
+  .col-4.col-sm-6 {
+    width: 50%;
+    margin-bottom: 10px;
+  }
+  .col-4.col-sm-12 {
+    width: 100%;
+    button {
+      width: 100%;
+    }
+  }
+}

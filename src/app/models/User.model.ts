@@ -25,6 +25,7 @@ export interface Answer {
   status: boolean;
 }
 export interface ClientForm {
+  id: string;
   name: string;
   school: string;
   class: string;

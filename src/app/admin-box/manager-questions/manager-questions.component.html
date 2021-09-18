@@ -3,7 +3,7 @@
     <div class=" col-6 col-md-3 col-xxl-2">
       <mat-form-field appearance="outline" class="item">
         <mat-label>Cấp</mat-label>
-        <mat-select (valueChange)="onChangedLevel($event)" [(ngModel)]="currentLevelId">
+        <mat-select (selectionChange)="getTopics()" [(ngModel)]="currentLevelId">
           <mat-option *ngFor="let level of levels" [value]="level.levelId">
             {{ level.name }}
           </mat-option>
@@ -17,19 +17,16 @@
       </mat-form-field>
     </div>
     <div class="col-6 col-md-3 col-xxl-2">
-      <button mat-raised-button class="btn" color="primary" [disabled]="inputTopicName.length<=0" (click)="addTopic()"
-        class="item">Thêm
-        đề</button>
+      <button mat-raised-button class="btn" color="primary" [disabled]="inputTopicName && inputTopicName.length <= 0" (click)="addTopic()" class="item">Thêm đề</button>
     </div>
     <div class="col-6 col-md-3 col-xxl-2">
-      <button mat-raised-button class="btn" color="primary" [disabled]="!canDelTopic" (click)="deleteTopic()" class="item">Xoá
-        đề</button>
+      <button mat-raised-button class="btn" color="primary" [disabled]="questions && questions.length > 0" (click)="deleteTopic()" class="item">Xoá đề</button>
     </div>
   </div>
 
   <div class="">
     <div class="col-12">
-      <mat-tab-group mat-align-tabs="start" (selectedTabChange)="topicChanged($event)">
+      <mat-tab-group mat-align-tabs="start" [selectedIndex]="tabIndex" (selectedTabChange)="tabChange($event)">
         <div *ngIf="topics" class="row">
           <mat-tab [label]="topic.name" [aria-label]="topic.topicId" *ngFor="let topic of topics;">
             <div *ngIf="questions" class="col-12">

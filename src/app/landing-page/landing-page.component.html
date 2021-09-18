@@ -6,14 +6,14 @@
     <a mat-raised-button color="primary" class="grid-2" (click)="openRules()">Thể lệ cuộc thi</a>
     <div class="time-start time-box grid-3">
         <p>Bắt đầu</p>
-        <p>08H00 <br> 10/09/2021</p>
+        <p>08H00 <br> {{ getDateTime() | date: 'dd/MM/yyyy' }}</p>
     </div>
     <div class="time-end time-box grid-4">
         <p>Kết thúc</p>
-        <p>08H00 <br> 10/09/2021</p>
+        <p>11H00 <br> {{ getDateTime() | date: 'dd/MM/yyyy' }}</p>
     </div>
     <div class="time-total time-box grid-5">
         <p>Cuộc thi kết thúc trong</p>
-        <p>08H00 <br> 10/09/2021</p>
+        <p>11H00 <br> {{ getDateTime() | date: 'dd/MM/yyyy' }}</p>
     </div>
 </div>
