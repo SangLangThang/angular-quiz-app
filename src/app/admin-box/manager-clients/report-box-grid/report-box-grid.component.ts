@@ -1,5 +1,5 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { ClientForm } from 'src/app/models/User.model';
+import { ClientForm, Levels, Topics } from 'src/app/models/User.model';
 import { jsPDF } from 'jspdf';
 import html2canvas from 'html2canvas';
 @Component({
@@ -10,10 +10,17 @@ import html2canvas from 'html2canvas';
 export class ReportBoxGridComponent implements OnInit {
   @ViewChild('pdfTable') pdftable: ElementRef;
   @Input() clients: ClientForm[] = [];
-
+  @Input() levels: string[] = [];
+  @Input() topics: string[] = [];
+  school:string[]=[];
+  time:string;
+  selectedLevel='Tất cả'
+  selectedTopic='Tất cả'
   constructor() {}
   
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.school=this.deduplicate(this.clients.map(e=>e.school))
+  }
   printPdf() {
     let data = this.pdftable.nativeElement;
     console.log(data);
@@ -31,5 +38,9 @@ export class ReportBoxGridComponent implements OnInit {
   }
   onChangeName(){
     
+  }
+  deduplicate(arr:string[]) {
+    let set = new Set(arr);
+    return [...set];
   }
 }

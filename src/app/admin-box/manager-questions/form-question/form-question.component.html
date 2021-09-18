@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row" *ngIf="questionForm">
   <form class="form" [formGroup]="questionForm" (ngSubmit)="onSubmit(questionForm.value)">
     <div class="group-type">
       <mat-radio-group formControlName="type">
@@ -25,13 +25,10 @@
 
     <div formArrayName="answers"  *ngFor="let answer of answers.controls; let i = index;">
       <div class="question" [formGroupName]="i">
-        <mat-form-field appearance="outline" class="question-info" *ngIf="!havePicture">
+        <mat-form-field appearance="outline" class="question-info">
           <mat-label>Lựa chọn {{ i + 1 }}</mat-label>
           <textarea matInput formControlName="name" [mat-autosize]="true"></textarea>
         </mat-form-field>
-        <div class="form-img">
-          <app-upload-file *ngIf="havePicture"></app-upload-file>
-        </div>
         <div class=" question-btn question-btn-2">
           <mat-checkbox formControlName="status"></mat-checkbox>
           <div class="hide_element" (click)="clearCheckbox(i)"></div>
@@ -49,7 +46,7 @@
       <button mat-raised-button color="primary" type="submit" [disabled]="!questionForm.valid">
         Xác nhận
       </button>
-      <button mat-raised-button color="warn" (click)="questionForm.reset()" type="button">
+      <button mat-raised-button color="warn" (click)="reset()" type="button">
         Reset
       </button>
       <button mat-raised-button color="warn" routerLink="/admin/questions" type="button">

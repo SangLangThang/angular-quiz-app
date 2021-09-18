@@ -6,8 +6,24 @@
     <th>Tên</th>
     <th>Trường</th>
     <th>Lớp</th>
-    <th>Cấp</th>
-    <th>Đề</th>
+    <th>
+      <mat-form-field appearance="outline">
+        <mat-label>Lọc theo cấp</mat-label>
+        <mat-select [(value)]="selectedLevel">
+          <mat-option value="Tất cả">Tất cả</mat-option>
+          <mat-option *ngFor="let level of levels" [value]="level">{{level}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </th>
+    <th>
+      <mat-form-field appearance="outline">
+        <mat-label>Lọc theo đề</mat-label>
+        <mat-select [(value)]="selectedTopic">
+          <mat-option value="Tất cả">Tất cả</mat-option>
+          <mat-option *ngFor="let topic of topics" [value]="topic">{{topic}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </th>
     <th>Điểm</th>
     <th>Ngày làm</th>
   </tr>

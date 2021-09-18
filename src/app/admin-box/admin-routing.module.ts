@@ -16,10 +16,10 @@ const adminRoutes: Routes = [
         redirectTo: 'questions',
       },
       {
-        path: 'questions/new',
+        path: 'questions/new/:topicId',
         component: FormQuestionComponent,
       },
-      { path: 'questions/edit', component: FormQuestionComponent },
+      { path: 'questions/edit/:questionID', component: FormQuestionComponent },
       { path: 'clients', component: ManagerClientsComponent },
       { path: 'questions', component: ManagerQuestionsComponent },
     ],

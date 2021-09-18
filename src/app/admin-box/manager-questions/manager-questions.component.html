@@ -1,6 +1,7 @@
 <div class="box">
   <div class="row box-level">
-    <mat-form-field appearance="outline" class="col-2">
+
+    <mat-form-field appearance="outline" class="item">
       <mat-label>Cấp</mat-label>
       <mat-select (valueChange)="onChangedLevel($event)" [(ngModel)]="currentLevelId">
         <mat-option *ngFor="let level of levels" [value]="level.levelId">
@@ -8,18 +9,19 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-    <mat-form-field class="col-2" appearance="outline" >
+
+    <mat-form-field class="item" appearance="outline" >
       <mat-label>Tên đề</mat-label>
       <input type="text" matInput  [(ngModel)]="inputTopicName" />
     </mat-form-field>
 
-    <button mat-raised-button color="primary" [disabled]="inputTopicName.length<=0" (click)="addTopic()" class="col-2">Thêm
+    <button mat-raised-button color="primary" [disabled]="inputTopicName.length<=0" (click)="addTopic()" class="item">Thêm
       đề</button>
-    <button mat-raised-button color="primary" [disabled]="!canDelTopic" (click)="deleteTopic()" class="col-2">Xoá
+    <button mat-raised-button color="primary" [disabled]="!canDelTopic" (click)="deleteTopic()" class="item">Xoá
       đề</button>
   </div>
   <div class=" row py-1">
-    <mat-tab-group  (selectedTabChange)="topicChanged($event)" [selectedIndex]="currentTopicIndex">
+    <mat-tab-group mat-align-tabs="start"  (selectedTabChange)="topicChanged($event)" >
       <div *ngIf="topics">
         <mat-tab [label]="topic.name" [aria-label]="topic.topicId" *ngFor="let topic of topics;">
           <div *ngIf="questions">
@@ -37,12 +39,12 @@
                 </mat-expansion-panel>
               </div>
               <div class="question-btn">
-                <button mat-raised-button color="primary" (click)="editQuestion(question)">Sửa</button>
+                <button mat-raised-button color="primary" [routerLink]="['edit',question.questionId]">Sửa</button>
                 <button mat-raised-button color="warn" (click)="deleteQuestion(question.questionId)">Xoá</button>
               </div>
             </div>
           </div>
-          <button mat-raised-button class="mt-2" color="primary" (click)="newQuestion()">Thêm</button>
+          <button mat-raised-button class="mt-2" color="primary" [routerLink]="['new',topic.topicId]">Thêm</button>
         </mat-tab>
       </div>
     </mat-tab-group>

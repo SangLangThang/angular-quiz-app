@@ -39,13 +39,16 @@ $quiz-app-theme: mat.define-light-theme(
 * {
   box-sizing: border-box;
 }
+@font-face {
+  font-family: Iciel;
+  src: url(assets/fonts/iCielBCCubano-Normal.otf);
+}
 html,
 body {
   height: 100%;
 }
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 .mat-error {

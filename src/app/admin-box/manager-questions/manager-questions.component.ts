@@ -23,9 +23,14 @@ export class ManagerQuestionsComponent implements OnInit {
 
   currentLevelId: string = '';
   currentTopicId: string = '';
+
   currentTopicIndex: number = 0;
+  lastTopicIndex: number = 0;
+
   canDelTopic = false;
   inputTopicName: string = '';
+
+  changedIndexTopicByMat=false;
 
   constructor(
     private firebase$: FirebaseService,
@@ -34,53 +39,81 @@ export class ManagerQuestionsComponent implements OnInit {
     private sortData$: SortDataService
   ) {}
   ngOnInit(): void {
-    console.log('init component manager');
-    if (this.session$.getStartEditQuestion() === 'no') {
-      this.startManager();
-    }
-    if (this.session$.getStartEditQuestion() === 'yes') {
-      this.returnManager();
-    }
+    this.getLevels();
+    this.getTopics();
+  }
+  
+  private getLevels(indexLevel: number = 0) {
+    this.firebase$.getLevels().subscribe((levels: any) => {
+      this.levels = this.sortData$.sortLevel(levels);
+      this.currentLevelId = this.levels[indexLevel].levelId;
+    });
   }
 
-  startManager() {
-    this.session$.setQuestion('');
-    this.session$.setStartEditQuestion('no');
-    this.firebase$.getLevels().subscribe((levels: any) => {
-      console.log('get levels ok');
-      this.levels = this.sortData$.sortLevel(levels);
-
-      this.currentLevelId =
-        this.session$.getLevel() != ''
-          ? this.session$.getLevel()
-          : this.levels[0].levelId;
-      this.session$.setLevel(this.currentLevelId);
-    });
-    //use get all topics because get levels have delay=> cannot get topic with levelID
+  private getTopics(levelId?:string) {
     this.firebase$.getTopics().subscribe((topics: any) => {
-      this.topicsData = this.sortData$.sortTopic(topics);
+      this.topicsData = topics;
       this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
-      console.log('filter topics:', topics);
-      if (this.topics.length > 0) {
-        this.session$.setTopic(this.topics[this.currentTopicIndex].topicId);
+      this.topics = this.sortData$.sortTopic(this.topics);
+    });
+  }
+  private updateListTopics(topics: Topics) {
+    this.topicsData.push(topics);
+    this.topics.push(topics);
+    this.topics = this.sortData$.sortTopic(this.topics);
+  }
+  private deleteListTopics(topicId: string, index: number) {
+    this.topics.splice(index, 1);
+    this.topicsData.forEach((e, i) => {
+      if (e.topicId === topicId) {
+        this.topicsData.splice(i, 1);
+        return;
       }
     });
   }
-  returnManager() {
-    this.session$.setQuestion('');
-    this.session$.setStartEditQuestion('no');
-    this.firebase$.getLevels().subscribe((levels: any) => {
-      console.log('get levels ok');
-      this.levels = this.sortData$.sortLevel(levels);
-      this.currentLevelId = this.session$.getLevel();
-    });
-    this.firebase$.getTopics().subscribe((topics: any) => {
-      this.topicsData = this.sortData$.sortTopic(topics);
-      this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
-      console.log('filter topics:', topics);
-      this.currentTopicIndex = 1000;
+  private getQuestions(topicId: string) {
+    this.firebase$.getQuestions(topicId).subscribe((questions: any) => {
+      this.questions = questions;
+      this.canDelTopic = this.questions.length > 0 ? false : true;
     });
   }
+  onChangedLevel(levelId: string) {
+    this.currentLevelId = levelId;
+    this.topics = this.filterTopic(levelId, this.topicsData);
+    this.questions=[]
+    if(this.topics.length>0){
+      this.getQuestions(this.topics[this.currentTopicIndex].topicId);
+    }
+  }
+
+  topicChanged(topic: MatTabChangeEvent): void {
+    this.lastTopicIndex=this.currentTopicIndex
+    if (this.topics.length > 0) {
+      this.getQuestions(topic.tab.ariaLabel);
+      this.currentTopicId = topic.tab.ariaLabel;
+      this.currentTopicIndex = topic.index;
+    }
+  }
+  addTopic() {
+    this.topicsData=[]
+    this.topics=[]
+    this.questions=[]
+    this.firebase$
+      .addTopic(this.currentLevelId, this.inputTopicName)
+      .then((value) => {
+        this.getTopics()
+        this.inputTopicName=''
+      });
+  }
+  deleteTopic() {
+    this.topicsData=[]
+    this.topics=[]
+    this.questions=[]
+    this.firebase$.deleteTopic(this.currentTopicId).then((value: any) => {
+      this.getTopics()
+    });
+  }
+
   filterTopic(levelId: string, topics: Topics[]): Topics[] {
     return topics.filter((topic) => topic.levelId === levelId);
   }
@@ -90,110 +123,13 @@ export class ManagerQuestionsComponent implements OnInit {
     return newLevel.filter((e) => e.levelId === levelId)[0];
   }
 
-  onChangedLevel(levelId: string) {
-    console.log('changed level');
-    this.currentLevelId = levelId;
-    this.session$.setLevel(levelId);
-    this.topics = this.filterTopic(levelId, this.topicsData);
-
-    if (this.topics.length > 0) {
-      while (
-        this.topics[this.currentTopicIndex] === undefined &&
-        this.currentTopicIndex >= 0
-      ) {
-        this.currentTopicIndex--;
-      }
-      this.firebase$
-        .getQuestions(this.topics[this.currentTopicIndex].topicId)
-        .subscribe((questions: any) => {
-          console.log('get questions ok');
-          this.questions = questions;
-          this.canDelTopic = this.questions.length > 0 ? false : true;
-        });
-    }
-  }
-
-  topicChanged(topic: MatTabChangeEvent): void {
-    if (this.currentTopicIndex === 1000) {
-      console.log("return question")
-      this.currentTopicIndex = +this.session$.getTopicIndex();
-      this.firebase$
-          .getQuestions(this.session$.getTopic())
-          .subscribe((questions: any) => {
-            console.log(questions);
-            this.questions = questions;
-            this.canDelTopic = this.questions.length > 0 ? false : true;
-            this.currentTopicIndex = topic.index;
-            this.currentTopicId = topic.tab.ariaLabel;
-            this.session$.setTopic(topic.tab.ariaLabel);
-            this.session$.setTopicIndex(topic.index);
-          });
-    } else {
-      if (this.topics.length > 0) {
-        console.log('changed topic');
-        this.firebase$
-          .getQuestions(topic.tab.ariaLabel)
-          .subscribe((questions: any) => {
-            console.log(questions);
-            this.questions = questions;
-            this.canDelTopic = this.questions.length > 0 ? false : true;
-            this.currentTopicIndex = topic.index;
-            this.currentTopicId = topic.tab.ariaLabel;
-            this.session$.setTopic(topic.tab.ariaLabel);
-            this.session$.setTopicIndex(topic.index);
-          });
-      }
-    }
-  }
-
-  editQuestion(question: QuestionsForm) {
-    this.session$.setStartEditQuestion('yes');
-    this.session$.setQuestion(question);
-    this.router.navigate(['/admin/questions/edit']);
-  }
-  newQuestion() {
-    this.session$.setStartEditQuestion('yes');
-    this.router.navigate(['/admin/questions/edit']);
-    /* this.session$.setTopicIndex(1)
-    this.currentTopicIndex= +this.session$.getTopicIndex() */
-  }
   deleteQuestion(questionId: string) {
     this.topics = [];
     this.firebase$.deleteQuestion(questionId).then((value) => {
       this.firebase$.getTopics().subscribe((topics: any) => {
-        console.log('get topics ok');
         this.topicsData = this.sortData$.sortTopic(topics);
         this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
       });
     });
-  }
-  deleteTopic() {
-    this.topics = [];
-    this.topicsData = [];
-    console.log('start del', this.topics);
-    this.firebase$.deleteTopic(this.currentTopicId).then((value: any) => {
-      this.firebase$.getTopics().subscribe((topics: any) => {
-        this.topicsData = this.sortData$.sortTopic(topics);
-        this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
-        console.log('filter', this.topics);
-        if (this.topics.length === 0) {
-          this.currentTopicIndex = 0;
-        }
-      });
-    });
-  }
-  addTopic() {
-    this.topics = [];
-    this.topicsData = [];
-    this.firebase$
-      .addTopic(this.currentLevelId, this.inputTopicName)
-      .then((value) => {
-        this.firebase$.getTopics().subscribe((topics: any) => {
-          this.inputTopicName = '';
-          console.log('get topics ok');
-          this.topicsData = this.sortData$.sortTopic(topics);
-          this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
-        });
-      });
   }
 }

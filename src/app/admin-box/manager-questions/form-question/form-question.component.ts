@@ -1,7 +1,7 @@
 import { SessionService } from './../../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { DialogService } from '../../../shared/dialog.service';
@@ -16,58 +16,57 @@ export class FormQuestionComponent implements OnInit {
     private dialog$: DialogService,
     private session$: SessionService,
     private firebase$: FirebaseService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    if (this.route.snapshot.params['questionID']) {
+      this.questionId = this.route.snapshot.params['questionID'];
+    }
+    if (this.route.snapshot.params['topicId']) {
+      this.topicId = this.route.snapshot.params['topicId'];
+    }
+  }
+  submitted = false;
+
   questionForm: FormGroup;
-  dataFromSession: any;
   topicId: string;
   questionId: string;
-  havePicture = false;
+  question: any;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
   ngOnInit(): void {
-    this.buildForm();
-    this.dataFromSession = this.session$.getQuestion();
-    if (this.dataFromSession !== '') {
-      this.questionId = this.dataFromSession.questionId;
-      this.updateForm(this.dataFromSession);
+    if (this.questionId) {
+      this.firebase$.getQuestion(this.questionId).subscribe((data: any) => {
+        this.question = data;
+        this.buildForm();
+      });
     } else {
-      this.topicId = this.session$.getTopic();
+      this.buildForm();
+      this.answers.at(0).patchValue({ status: true });
     }
-  }
-
-  updateForm(form: any) {
-    for (let i = 1; i < form.answers.length; i++) {
-      this.answers.push(this.createAnswer());
-    }
-
-    this.questionForm.patchValue({
-      question: form.question,
-      multiAnswer: form.multiAnswer,
-      answers: [...form.answers],
-      type: form.type,
-    });
   }
   buildForm() {
     this.questionForm = this.fb.group({
-      question: ['', Validators.required],
-      multiAnswer: [false, Validators.required],
-      type: ['text', Validators.required],
-      answers: new FormArray([this.createAnswer()]),
+      question: [this.question?.question ?? '', Validators.required],
+      multiAnswer: [this.question?.multiAnswer ?? false, Validators.required],
+      type: [this.question?.type ?? 'text', Validators.required],
+      answers: new FormArray(
+        this.question?.answers?.length > 0
+          ? this.question?.answers.map((item: any) => this.createAnswer(item))
+          : [this.createAnswer()]
+      ),
     });
-    this.answers.at(0).patchValue({ status: true })
   }
-  createAnswer(): FormGroup {
+  createAnswer(item?: any): FormGroup {
     return this.fb.group({
-      name: ['', Validators.required],
-      status: [false, Validators.required],
+      name: [item?.name ?? '', Validators.required],
+      status: [item?.status ?? false, Validators.required],
     });
   }
   addAnswer() {
     this.answers.push(this.createAnswer());
   }
-
   removeAnswer(index: number) {
     this.answers.removeAt(index);
   }
@@ -87,21 +86,36 @@ export class FormQuestionComponent implements OnInit {
         .patchValue({ status: !this.answers.at(index).value.status });
     }
   }
+
+  reset() {
+    this.questionForm.reset();
+    this.questionForm.patchValue({ type: 'text' });
+    this.answers.at(0).patchValue({ status: true });
+  }
   onSubmit(value: any) {
-    if (this.dataFromSession === '') {
-      let newQuestionsForm: QuestionsForm = {
-        topicId: this.topicId,
-        ...value,
-      };
-      this.firebase$.addQuestions(newQuestionsForm).then((value) => {
-        this.dialog$.openSnackBar();
-        this.router.navigate(['admin/questions']);
-      });
-    } else {
-      this.firebase$.editQuestions(this.questionId, value).then((value) => {
-        this.dialog$.openSnackBar();
-        this.router.navigate(['admin/questions']);
-      });
+    this.submitted = true;
+    if(this.questionId){
+      this.editQuestion(this.questionId,value)
+      return
     }
+    this.createQuestion(value);
+  }
+
+  private createQuestion(valueForm: any) {
+    let newQuestionsForm: QuestionsForm = {
+      topicId: this.topicId,
+      ...valueForm,
+    };
+    console.log(newQuestionsForm);
+    this.firebase$.addQuestions(newQuestionsForm).then((value) => {
+      this.dialog$.openSnackBar();
+      this.router.navigate(['../../'], { relativeTo: this.route });
+    });
+  }
+  private editQuestion(questionID: string, valueForm: any) {
+    this.firebase$.editQuestions(questionID, valueForm).then((value) => {
+      this.dialog$.openSnackBar();
+      this.router.navigate(['../../'], { relativeTo: this.route });
+    });
   }
 }

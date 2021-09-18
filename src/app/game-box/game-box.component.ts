@@ -72,7 +72,7 @@ export class GameBoxComponent implements OnInit {
     this.percent = '0%';
     this.start = setInterval(() => {
       this.time_start--;
-      this.percent = `${((5 - this.time_start) * 100) / 15}%`;
+      this.percent = `${((15 - this.time_start) * 100) / 15}%`;
       if (this.time_start === 0) {
         clearInterval(this.start);
         this.optionSelected(this.ques_start,1000, false);
