@@ -1,5 +1,5 @@
 import { SortDataService } from './../../shared/sort-data.service';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChildren, ElementRef, QueryList } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Router } from '@angular/router';
 import { Levels, QuestionsForm, Topics } from 'src/app/models/User.model';
@@ -12,6 +12,7 @@ import { SessionService } from './../../shared/session.service';
   styleUrls: ['./manager-questions.component.scss'],
 })
 export class ManagerQuestionsComponent implements OnInit {
+  @ViewChildren('test') test:QueryList<ElementRef>
   levels: Levels[];
   topicsData: Topics[];
   topics: Topics[];
@@ -75,6 +76,7 @@ export class ManagerQuestionsComponent implements OnInit {
     this.firebase$.getQuestions(topicId).subscribe((questions: any) => {
       this.questions = questions;
       this.canDelTopic = this.questions.length > 0 ? false : true;
+      
     });
   }
   onChangedLevel(levelId: string) {
@@ -92,6 +94,7 @@ export class ManagerQuestionsComponent implements OnInit {
       this.getQuestions(topic.tab.ariaLabel);
       this.currentTopicId = topic.tab.ariaLabel;
       this.currentTopicIndex = topic.index;
+      console.log(this.test)
     }
   }
   addTopic() {
