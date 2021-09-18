@@ -33,14 +33,14 @@ export class FormClientModalComponent implements OnInit {
     this.session$.clearSesstion();
     this.buildForm();
     this.firebase$.getLevels().subscribe((levels: any) => {
-      console.log('get levels finish');
+      // console.log('get levels finish');
       this.levels = this.sortData$.sortLevel(levels);;
       this.currentLevelId = this.levels[0].levelId;
       this.clientForm.get('levelId')?.setValue(this.currentLevelId);
       //use 2 because levels[2]={name:Cấp 1}
     });
     this.firebase$.getTopics().subscribe((topics: any) => {
-      console.log('get topics finish');
+      // console.log('get topics finish');
       this.topicsData = this.sortData$.sortTopic(topics);
       this.topics = this.selectedTopics(this.currentLevelId, this.topicsData);
       this.clientForm.get('topicId')?.setValue(this.topics[0].topicId);

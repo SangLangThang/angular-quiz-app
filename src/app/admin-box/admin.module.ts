@@ -6,7 +6,7 @@ import { UploadFileComponent } from './manager-questions/upload-file/upload-file
 import { AdminBoxComponent } from './admin-box.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { ManagerClientsComponent } from './manager-clients/manager-clients.component';
-import { ReportBoxGridComponent } from './manager-clients/report-box-grid/report-box-grid.component';
+// import { ReportBoxGridComponent } from './manager-clients/report-box-grid/report-box-grid.component';
 import { FormQuestionComponent } from './manager-questions/form-question/form-question.component';
 import { ManagerQuestionsComponent } from './manager-questions/manager-questions.component';
 
@@ -23,7 +23,7 @@ import { ManagerQuestionsComponent } from './manager-questions/manager-questions
     ManagerClientsComponent,
     AdminBoxComponent,
     FormQuestionComponent,
-    ReportBoxGridComponent,
+    // ReportBoxGridComponent,
     UploadFileComponent
   ],
 })
