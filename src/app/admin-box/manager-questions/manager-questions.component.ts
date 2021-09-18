@@ -117,6 +117,17 @@ export class ManagerQuestionsComponent implements OnInit {
   topicChanged(topic: MatTabChangeEvent): void {
     if (this.currentTopicIndex === 1000) {
       this.currentTopicIndex = +this.session$.getTopicIndex();
+      this.firebase$
+          .getQuestions(this.session$.getTopic())
+          .subscribe((questions: any) => {
+            console.log(questions);
+            this.questions = questions;
+            this.canDelTopic = this.questions.length > 0 ? false : true;
+            this.currentTopicIndex = topic.index;
+            this.currentTopicId = topic.tab.ariaLabel;
+            this.session$.setTopic(topic.tab.ariaLabel);
+            this.session$.setTopicIndex(topic.index);
+          });
     } else {
       if (this.topics.length > 0) {
         console.log('changed topic');

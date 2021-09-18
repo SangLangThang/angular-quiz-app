@@ -66,9 +66,7 @@ body {
     overflow: hidden;
   }
 }
-
-input {
-  
-    font-size: 16px; 
-  
+/* hot fix */
+input.mat-input-element.mat-form-field-autofill-control {
+  font-size: 16px;
 }

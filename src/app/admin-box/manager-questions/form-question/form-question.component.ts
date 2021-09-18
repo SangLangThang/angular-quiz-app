@@ -88,8 +88,7 @@ export class FormQuestionComponent implements OnInit {
     }
   }
   onSubmit(value: any) {
-    console.log(value);
-    /* if (this.dataFromSession === '') {
+    if (this.dataFromSession === '') {
       let newQuestionsForm: QuestionsForm = {
         topicId: this.topicId,
         ...value,
@@ -103,6 +102,6 @@ export class FormQuestionComponent implements OnInit {
         this.dialog$.openSnackBar();
         this.router.navigate(['admin/questions']);
       });
-    } */
+    }
   }
 }
