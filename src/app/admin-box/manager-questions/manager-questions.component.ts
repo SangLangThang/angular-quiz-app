@@ -39,7 +39,6 @@ export class ManagerQuestionsComponent implements OnInit {
       this.startManager();
     }
     if (this.session$.getStartEditQuestion() === 'yes') {
-      this.currentTopicIndex = +this.session$.getTopicIndex();
       this.returnManager();
     }
   }
@@ -70,7 +69,6 @@ export class ManagerQuestionsComponent implements OnInit {
   returnManager() {
     this.session$.setQuestion('');
     this.session$.setStartEditQuestion('no');
-    this.currentTopicIndex = 1000;
     this.firebase$.getLevels().subscribe((levels: any) => {
       console.log('get levels ok');
       this.levels = this.sortData$.sortLevel(levels);
@@ -80,6 +78,7 @@ export class ManagerQuestionsComponent implements OnInit {
       this.topicsData = this.sortData$.sortTopic(topics);
       this.topics = this.filterTopic(this.currentLevelId, this.topicsData);
       console.log('filter topics:', topics);
+      this.currentTopicIndex = 1000;
     });
   }
   filterTopic(levelId: string, topics: Topics[]): Topics[] {
@@ -116,6 +115,7 @@ export class ManagerQuestionsComponent implements OnInit {
 
   topicChanged(topic: MatTabChangeEvent): void {
     if (this.currentTopicIndex === 1000) {
+      console.log("return question")
       this.currentTopicIndex = +this.session$.getTopicIndex();
       this.firebase$
           .getQuestions(this.session$.getTopic())
