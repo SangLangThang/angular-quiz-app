@@ -22,7 +22,7 @@ export class FormQuestionComponent implements OnInit {
   dataFromSession: any;
   topicId: string;
   questionId: string;
-  havePicture=false;
+  havePicture = false;
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
@@ -46,15 +46,17 @@ export class FormQuestionComponent implements OnInit {
       question: form.question,
       multiAnswer: form.multiAnswer,
       answers: [...form.answers],
+      type: form.type,
     });
   }
   buildForm() {
     this.questionForm = this.fb.group({
       question: ['', Validators.required],
       multiAnswer: [false, Validators.required],
-      picture: [false, Validators.required],
+      type: ['text', Validators.required],
       answers: new FormArray([this.createAnswer()]),
     });
+    this.answers.at(0).patchValue({ status: true })
   }
   createAnswer(): FormGroup {
     return this.fb.group({
@@ -86,7 +88,8 @@ export class FormQuestionComponent implements OnInit {
     }
   }
   onSubmit(value: any) {
-    if (this.dataFromSession === '') {
+    console.log(value);
+    /* if (this.dataFromSession === '') {
       let newQuestionsForm: QuestionsForm = {
         topicId: this.topicId,
         ...value,
@@ -100,6 +103,6 @@ export class FormQuestionComponent implements OnInit {
         this.dialog$.openSnackBar();
         this.router.navigate(['admin/questions']);
       });
-    }
+    } */
   }
 }

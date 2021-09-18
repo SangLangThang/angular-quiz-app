@@ -1,15 +1,21 @@
 <div class="row">
   <form class="form" [formGroup]="questionForm" (ngSubmit)="onSubmit(questionForm.value)">
+    <div class="group-type">
+      <mat-radio-group formControlName="type">
+        <mat-radio-button value="text">Dạng chữ</mat-radio-button>
+        <mat-radio-button value="picture">Dạng hình</mat-radio-button>
+      </mat-radio-group>
+    </div>
     <div class="question">
       <mat-form-field appearance="outline" class="question-info">
         <mat-label>Câu hỏi</mat-label>
         <textarea matInput formControlName="question" [mat-autosize]="true"></textarea>
       </mat-form-field>
       <div class="question-btn">
-        <div class="question-btn-item">
+        <!-- <div class="question-btn-item">
           <mat-checkbox formControlName="multiAnswer"></mat-checkbox>
           <mat-icon>storage</mat-icon>
-        </div>
+        </div> -->
        <!--  <div class="question-btn-item">
           <mat-checkbox formControlName="picture" (click)="havePicture=!havePicture"></mat-checkbox>
           <mat-icon>camera_alt</mat-icon>
