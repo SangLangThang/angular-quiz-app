@@ -30,12 +30,12 @@
     <div class="col-12">
       <ul class="nav nav-tabs" *ngIf="topics">
         <ng-container *ngFor="let topic of topics;">
-          <li class="nav-item" (click)="currentTopicId=topic.topicId ; getQuestions()">
+          <li class="nav-item" (click)="changeTopic(topic.topicId)">
             <a class="nav-link" [class.active]="topic.topicId==currentTopicId">{{topic.name}}</a>
           </li>
         </ng-container>
       </ul>
-      <ul class="list-question" *ngIf="questions?.length!=0">
+      <ul class="list-question" >
         <li class="item" *ngFor="let question of questions;let i =index;" #templateQuestion (click)="toggleAnswer(i)">
           <div class="d-flex gx-1">
             <div class="flex-grow-1 item-name">
@@ -53,7 +53,7 @@
             </div>
           </div>
         </li>
-        <button type="button" class="btn btn-primary mt-1" [routerLink]="['new',currentTopicId]">Thêm</button>
+        <button type="button" [disabled]="topics?.length==0"  class="btn btn-primary mt-1" [routerLink]="['new',currentTopicId]">Thêm</button>
       </ul>
     </div>
   </div>

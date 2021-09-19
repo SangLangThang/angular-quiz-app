@@ -20,27 +20,22 @@ export class ManagerQuestionsComponent implements OnInit {
   topicsData: Topics[];
   topics: Topics[];
   questions: QuestionsForm[];
-  showQuestion: boolean = true;
-  showFormQuestion: boolean = false;
-  selectValue: string = '';
   currentLevelId: string;
   currentTopicId: string;
   currentTopicIndex: number = 0;
-  lastTopicIndex: number = 0;
-  canDelTopic = false;
   inputTopicName: string = '';
-  changedIndexTopicByMat = false;
   tabIndex: number;
-
   toggle: boolean[] = [];
 
   constructor(
     private firebase$: FirebaseService,
     private renderer: Renderer2
   ) {}
+
   @ViewChildren('templateQuestion') templateQuestion: QueryList<ElementRef>;
+
   ngOnInit(): void {
-    console.log('init')
+    console.log('init');
     this.getLevels();
   }
 
@@ -48,12 +43,12 @@ export class ManagerQuestionsComponent implements OnInit {
     this.firebase$.getLevels().subscribe((levels: any[]) => {
       this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
       this.currentLevelId = this.levels[0].levelId;
+      console.log('get level:', this.currentLevelId);
       this.getTopics();
     });
   }
 
   getTopics() {
-    console.log('currentLevelId:', this.currentLevelId);
     this.firebase$
       .getTopicsWithLevelId(this.currentLevelId)
       .subscribe((topics: any[]) => {
@@ -64,22 +59,24 @@ export class ManagerQuestionsComponent implements OnInit {
         }
         this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.currentTopicId = this.topics[0].topicId;
+        console.log('get topic:', this.currentTopicId);
         this.getQuestions();
       });
   }
 
   getQuestions() {
-    console.log('currentTopicId:', this.currentTopicId);
+    console.log('currenttopic', this.currentTopicId);
     this.firebase$
       .getQuestions(this.currentTopicId)
       .subscribe((questions: any[]) => {
-        console.log('listquestion', questions);
+        console.log('qet question', questions);
         this.questions = questions.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.questions.forEach((e) => this.toggle.push(true));
       });
   }
 
   addTopic() {
+    console.log('add topic');
     this.firebase$
       .addTopic(this.currentLevelId, this.inputTopicName)
       .then((_) => {
@@ -88,14 +85,8 @@ export class ManagerQuestionsComponent implements OnInit {
       });
   }
 
-  tabChange(topic: MatTabChangeEvent) {
-    if (this.topics?.length > 0) {
-      this.currentTopicId = topic.tab.ariaLabel;
-      this.getQuestions();
-    }
-  }
-
   deleteTopic() {
+    console.log('del topic');
     this.firebase$.deleteTopic(this.currentTopicId).then((_) => {
       this.tabIndex = 0;
       this.getTopics();
@@ -106,9 +97,12 @@ export class ManagerQuestionsComponent implements OnInit {
     this.firebase$.deleteQuestion(questionId).then((_) => this.getQuestions());
   }
   changeLevel() {
-    console.log(this.currentLevelId)
-    this.questions=[] //clear question when reload because if topic length <0
+    this.questions = []; //clear question when reload because if topic length <0
     this.getTopics();
+  }
+  changeTopic(id: string) {
+    this.currentTopicId = id;
+    this.getQuestions();
   }
   toggleAnswer(index: number) {
     let ele = this.templateQuestion.filter((e, i) => i === index)[0]
