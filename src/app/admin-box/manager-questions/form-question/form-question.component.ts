@@ -1,7 +1,6 @@
-import { SessionService } from './../../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { DialogService } from '../../../shared/dialog.service';
@@ -93,7 +92,7 @@ export class FormQuestionComponent implements OnInit {
     this.questionForm.patchValue({ type: 'text' });
     this.answers.at(0).patchValue({ status: true });
   }
-  
+
   onSubmit(value: any) {
     this.submitted = true;
     if(this.questionId){
@@ -108,16 +107,13 @@ export class FormQuestionComponent implements OnInit {
       topicId: this.topicId,
       ...valueForm,
     };
-    console.log(newQuestionsForm);
-    this.firebase$.addQuestions(newQuestionsForm).then((value) => {
-      this.dialog$.openSnackBar('Thêm câu hỏi thành công','success')
-      this.router.navigate(['../../'], { relativeTo: this.route });
-    });
+    this.firebase$.addQuestions(newQuestionsForm)
+      .then();
   }
   private editQuestion(questionID: string, valueForm: any) {
-    this.firebase$.editQuestions(questionID, valueForm).then((value) => {
-      this.dialog$.openSnackBar('Sửa câu hỏi thành công','success')
-      this.router.navigate(['../../'], { relativeTo: this.route });
-    });
+    this.firebase$.editQuestions(questionID, valueForm)
+      .then(() => {
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      });
   }
 }

@@ -12,29 +12,45 @@ import { FirebaseService } from 'src/app/shared/firebase.service';
 })
 export class ManagerClientsComponent implements OnInit {
   clients: ClientForm[] = [];
-  levels: string[];
-  topics: string[];
-  school: string[] = [];
-  time: string;
+  levels: any[];
+  topics: any[];
   selectedLevel = 'all';
   selectedTopic = 'all';
   clientsCache: ClientForm[] = [];
-  
+
   @ViewChild('pdfTable') pdftable: ElementRef;
-  
+
   constructor(private firebase$: FirebaseService) {}
 
   ngOnInit(): void {
     this.getClients();
+    this.getLevels();
+    this.getTopics();
+  }
+
+  getLevels() {
+    this.firebase$.getLevels().subscribe((levels: any[]) => {
+      this.levels = levels.reverse().map((e: any) => e.name);
+    });
+  }
+
+  getTopics() {
+    this.firebase$.getTopics().subscribe((topics: any[]) => {
+      this.topics = this.deduplicate(topics.map((e: any) => e.name));
+    });
+  }
+
+  deduplicate(arr: string[]) {
+    let set = new Set(arr);
+    return [...set];
   }
 
   getClients() {
-    this.firebase$.getClients().subscribe((clients: any) => {
-      this.clients = clients;
-      this.clientsCache=clients
-      this.levels = this.deduplicate(this.clients.map((e) => e.levelId));
-      this.topics = this.deduplicate(this.clients.map((e) => e.topicId));
-    });
+    this.firebase$.getClients()
+      .subscribe((clients: any) => {
+        this.clients = clients;
+        this.clientsCache=  clients
+      });
   }
 
   filterAll(){
@@ -53,11 +69,6 @@ export class ManagerClientsComponent implements OnInit {
 
   deleteClient(id: string) {
     this.firebase$.deleteClient(id).then((_) => this.getClients());
-  }
-
-  deduplicate(arr: string[]) {
-    let set = new Set(arr);
-    return [...set];
   }
 
   printPdf() {
