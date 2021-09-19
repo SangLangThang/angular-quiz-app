@@ -73,11 +73,3 @@ body {
 input.mat-input-element.mat-form-field-autofill-control {
   font-size: 16px;
 }
-.mat-drawer{
-  transition: all .3s;
-}
-@media only screen and (max-width: 767px) {
-  .mat-drawer{
-    display: none !important;
-  }
-}

@@ -53,10 +53,13 @@
     grid-template-areas:
       "a a b b"
       "c d e e";
-      & a{
-        min-height: 60px;
-      }
   }
+  // .img-landing {
+  //   img {
+  //     width: auto;
+  //     height: 250px;
+  //   }
+  // }
 }
 
 @media only screen and (max-width: 500px) {

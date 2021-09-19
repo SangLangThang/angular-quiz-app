@@ -39,9 +39,9 @@
         <ng-container *ngFor="let question of questions;let i =index;">
           <li class="item" [class.show]="toggle.includes(i)" (click)="toggleAnswer(i)">
             <div class="d-flex gx-1">
-              <div class="item-name">
+              <div class="flex-grow-1 item-name">
                 <p>{{question.question}}</p>
-                <ul class="item-answer">
+                <ul class="col-11 item-answer">
                   <li class="answer" *ngFor="let answer of question.answers;let j = index;"> {{answer.name}}
                     <mat-icon color="primary" *ngIf="answer.status===true">check_circle</mat-icon>
                   </li>
