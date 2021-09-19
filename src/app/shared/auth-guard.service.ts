@@ -7,6 +7,8 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { Observable } from 'rxjs';
+import { getCookie } from './cookie';
+import { IS_LOGGED } from './consts';
 
 @Injectable({
   providedIn: 'root',
@@ -17,10 +19,7 @@ export class AuthGuardService implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
-    if (this.firebase$.isCreatedClient) {
-      return true;
-    }
-    if (this.firebase$.isLogin) {
+    if(getCookie(IS_LOGGED) || this.firebase$.isCreatedClient || this.firebase$.isLogin) {
       return true;
     }
     this.router.navigate([''])

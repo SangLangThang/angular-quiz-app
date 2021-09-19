@@ -10,14 +10,15 @@
       <a mat-button  class="home-btn" routerLink="/">
         <mat-icon>home</mat-icon>
         <span class='text'>Trang chủ</span>
-        
       </a>
-      <a mat-raised-button color="primary" class="login-btn" (click)="openDialog()">
+      <a *ngIf="!isLogged" mat-raised-button color="primary" class="login-btn" (click)="openDialog()">
         <mat-icon> person_pin</mat-icon>
         <span class='text'>Đăng nhập</span>
       </a>
+      <a *ngIf="isLogged" mat-raised-button color="primary" class="login-btn" routerLink="admin">
+        <mat-icon> person_pin</mat-icon>
+      </a>
     </div>
-
   </div>
 
   <router-outlet></router-outlet>

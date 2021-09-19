@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'play',canActivate:[AuthGuardService], component: GameBoxComponent },
 /*   { path: 'play', canActivate:[AuthGuardService], component: GameBoxComponent },
  */  {
-    path: 'admin',canActivate:[AuthGuardService],
+    path: 'admin', canActivate:[AuthGuardService],
     loadChildren: () => import('./admin-box/admin.module').then(m => m.AdminModule),
   },
 ];

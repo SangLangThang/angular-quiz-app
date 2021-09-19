@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { IS_LOGGED } from 'src/app/shared/consts';
+import { setCookie } from 'src/app/shared/cookie';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 @Component({
   selector: 'app-login-modal',
@@ -36,6 +38,7 @@ export class LoginModalComponent implements OnInit {
       this.isLoging = false;
       if (response && response.length > 0) {
         this.firebase$.isLogin = true;
+        setCookie(IS_LOGGED, 'admin', 1);
         this.dialog.closeAll();
         this.router.navigate(['/admin']);
       }else{
