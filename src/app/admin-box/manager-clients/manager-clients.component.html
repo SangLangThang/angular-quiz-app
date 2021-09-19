@@ -1,13 +1,13 @@
 <!-- <app-report-box-grid [clients]="clients" [levels]="levels" [topics]="topics"></app-report-box-grid> -->
 <div class="row mb-2">
   <div class="col-lg-4 col-sm-6 mb-2">
-    <select class="form-select" [(ngModel)]="selectedLevel" (change)="filterLevel()">
+    <select class="form-select" [(ngModel)]="selectedLevel" (change)="filterAll()">
       <option value="all">Tất cả</option>
       <option *ngFor="let level of levels" [value]="level">{{level}}</option>
     </select>
   </div>
   <div class="col-lg-4 col-sm-6 mb-2">
-    <select class="form-select" [(ngModel)]="selectedTopic" (change)="filterTopic()">
+    <select class="form-select" [(ngModel)]="selectedTopic" (change)="filterAll()">
       <option value="all">Tất cả</option>
       <option *ngFor="let topic of topics" [value]="topic">{{topic}}</option>
     </select>

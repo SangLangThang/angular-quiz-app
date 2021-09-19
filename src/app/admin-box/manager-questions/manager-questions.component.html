@@ -3,7 +3,7 @@
     <div class=" col-6 col-md-3 col-xxl-2">
       <mat-form-field appearance="outline" class="item">
         <mat-label>Cấp</mat-label>
-        <mat-select (selectionChange)="getTopics()" [(ngModel)]="currentLevelId">
+        <mat-select (selectionChange)="changeLevel()" [(ngModel)]="currentLevelId">
           <mat-option *ngFor="let level of levels" [value]="level.levelId">
             {{ level.name }}
           </mat-option>
@@ -11,52 +11,52 @@
       </mat-form-field>
     </div>
     <div class="col-6 col-md-3 col-xxl-2">
-      <mat-form-field class="item" appearance="outline" >
+      <mat-form-field class="item" appearance="outline">
         <mat-label>Tên đề</mat-label>
-        <input type="text" matInput  [(ngModel)]="inputTopicName" />
+        <input type="text" matInput [(ngModel)]="inputTopicName" />
       </mat-form-field>
     </div>
     <div class="col-6 col-md-3 col-xxl-2">
-      <button mat-raised-button class="btn" color="primary" [disabled]="inputTopicName && inputTopicName.length <= 0" (click)="addTopic()" class="item">Thêm đề</button>
+      <button mat-raised-button class="btn" color="primary" [disabled]="inputTopicName && inputTopicName.length <= 0"
+        (click)="addTopic()" class="item">Thêm đề</button>
     </div>
     <div class="col-6 col-md-3 col-xxl-2">
-      <button mat-raised-button class="btn" color="primary" [disabled]="questions && questions.length > 0" (click)="deleteTopic()" class="item">Xoá đề</button>
+      <button mat-raised-button class="btn" color="primary" [disabled]="questions && questions.length > 0"
+        (click)="deleteTopic()" class="item">Xoá đề</button>
     </div>
   </div>
 
-  <div class="">
+  <div class="row">
     <div class="col-12">
-      <mat-tab-group mat-align-tabs="start" [selectedIndex]="tabIndex" (selectedTabChange)="tabChange($event)">
-        <div *ngIf="topics" class="row">
-          <mat-tab [label]="topic.name" [aria-label]="topic.topicId" *ngFor="let topic of topics;">
-            <div *ngIf="questions" class="col-12">
-              <div class="questions" *ngFor="let question of questions;let i =index;">
-                <div class="question">
-                  <mat-expansion-panel hideToggle>
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        Câu {{i+1}} : {{question.question}}
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
-                    <p class="answer" *ngFor="let answer of question.answers;let j = index;">
-                      <span *ngIf="question.type==='picture'">Link hình ảnh</span>
-                      <span *ngIf="question.type!='picture'">
-                        {{answer.name}}
-                      </span>
-                      <mat-icon color="primary" *ngIf="answer.status===true">check_circle</mat-icon>
-                    </p>
-                  </mat-expansion-panel>
-                </div>
-                <div class="button">
-                  <button mat-raised-button color="primary" [routerLink]="['edit',question.questionId]">Sửa</button>
-                  <button mat-raised-button color="warn" (click)="deleteQuestion(question.questionId)">Xoá</button>
-                </div>
+      <ul class="nav nav-tabs" *ngIf="topics">
+        <ng-container *ngFor="let topic of topics;">
+          <li class="nav-item" (click)="changeTopic(topic.topicId)">
+            <a class="nav-link" [class.active]="topic.topicId==currentTopicId">{{topic.name}}</a>
+          </li>
+        </ng-container>
+      </ul>
+      <ul class="list-question" >
+        <ng-container *ngFor="let question of questions;let i =index;">
+          <li class="item" [class.show]="toggle.includes(i)" (click)="toggleAnswer(i)">
+            <div class="d-flex gx-1">
+              <div class="flex-grow-1 item-name">
+                <p>{{question.question}}</p>
+                <ul class="col-11 item-answer">
+                  <li class="answer" *ngFor="let answer of question.answers;let j = index;"> {{answer.name}}
+                    <mat-icon color="primary" *ngIf="answer.status===true">check_circle</mat-icon>
+                  </li>
+                </ul>
+              </div>
+              <div class="item-btn">
+                <button type="button" class="btn btn-primary me-1"
+                  [routerLink]="['edit',question.questionId]">Sửa</button>
+                <button type="button" class="btn btn-danger" (click)="deleteQuestion(question.questionId)">Xoá</button>
               </div>
             </div>
-            <button mat-raised-button class="mt-2" color="primary" [routerLink]="['new',topic.topicId]">Thêm</button>
-          </mat-tab>
-        </div>
-      </mat-tab-group>
+          </li>
+        </ng-container>
+      </ul>
+      <button type="button" [disabled]="topics?.length==0"  class="btn btn-primary mt-1" [routerLink]="['new',currentTopicId]">Thêm</button>
     </div>
   </div>
 </div>

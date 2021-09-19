@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { MatTabChangeEvent } from '@angular/material/tabs';
+import {
+  Component, OnInit
+} from '@angular/core';
 import { Levels, QuestionsForm, Topics } from 'src/app/models/User.model';
 import { FirebaseService } from './../../shared/firebase.service';
 
@@ -13,20 +14,15 @@ export class ManagerQuestionsComponent implements OnInit {
   topicsData: Topics[];
   topics: Topics[];
   questions: QuestionsForm[];
-  showQuestion: boolean = true;
-  showFormQuestion: boolean = false;
-  selectValue: string = '';
   currentLevelId: string;
   currentTopicId: string;
   currentTopicIndex: number = 0;
-  lastTopicIndex: number = 0;
-  canDelTopic = false;
   inputTopicName: string = '';
-  changedIndexTopicByMat=false;
   tabIndex: number;
+  toggle: any[] = [];
 
   constructor(
-    private firebase$: FirebaseService
+    private firebase$: FirebaseService,
   ) {}
 
   ngOnInit(): void {
@@ -34,54 +30,69 @@ export class ManagerQuestionsComponent implements OnInit {
   }
 
   getLevels() {
-    this.firebase$.getLevels()
-      .subscribe((levels: any[]) => {
-        this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
-        this.currentLevelId = this.levels[0].levelId;
-        this.getTopics();
-      });
+    this.firebase$.getLevels().subscribe((levels: any[]) => {
+      this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
+      this.currentLevelId = this.levels[0].levelId;
+      this.getTopics();
+    });
   }
 
   getTopics() {
-    this.firebase$.getTopicsWithLevelId(this.currentLevelId)
+    this.firebase$
+      .getTopicsWithLevelId(this.currentLevelId)
       .subscribe((topics: any[]) => {
+        if (topics?.length <= 0) {
+          this.topics = [];
+          this.currentTopicId = '';
+          return;
+        }
         this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
-        this.currentTopicId = this.topics[0].topicId
+        this.currentTopicId = this.topics[0].topicId;
         this.getQuestions();
       });
   }
 
   getQuestions() {
-    this.firebase$.getQuestions(this.currentTopicId)
+    this.firebase$
+      .getQuestions(this.currentTopicId)
       .subscribe((questions: any[]) => {
         this.questions = questions.sort((a, b) => (a.name < b.name ? -1 : 1));
+        this.questions.forEach((e) => this.toggle.push(true));
       });
   }
 
   addTopic() {
     this.firebase$
       .addTopic(this.currentLevelId, this.inputTopicName)
-      .then(_ => {
-        this.getTopics()
-        this.inputTopicName = ''
+      .then((_) => {
+        this.getTopics();
+        this.inputTopicName = '';
       });
-  }
-
-  tabChange(topic: MatTabChangeEvent) {
-    this.currentTopicId = topic.tab.ariaLabel;
-    this.getQuestions();
   }
 
   deleteTopic() {
-    this.firebase$.deleteTopic(this.currentTopicId)
-      .then(_ => {
-        this.tabIndex = 0;
-        this.getTopics();
-      });
+    this.firebase$.deleteTopic(this.currentTopicId).then((_) => {
+      this.tabIndex = 0;
+      this.getTopics();
+    });
   }
 
   deleteQuestion(questionId: string) {
-    this.firebase$.deleteQuestion(questionId)
-    .then(_ => this.getQuestions());
+    this.firebase$.deleteQuestion(questionId).then((_) => this.getQuestions());
+  }
+  changeLevel() {
+    this.questions = []; //clear question when reload because if topic length <0
+    this.getTopics();
+  }
+  changeTopic(id: string) {
+    this.currentTopicId = id;
+    this.getQuestions();
+  }
+  toggleAnswer(index: number) {
+    if(this.toggle.includes(index)){
+      this.toggle=this.toggle.filter(x=>x!=index)
+      return 
+    }
+    this.toggle.push(index)
   }
 }

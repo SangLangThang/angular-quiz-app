@@ -44,7 +44,7 @@ testem.log
 .DS_Store
 Thumbs.db
 firebase.json
-/.firebase
+/.firebase *
 .firebaserc
 environment.prod.ts
 environment.ts

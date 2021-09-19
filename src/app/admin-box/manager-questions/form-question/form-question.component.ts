@@ -14,7 +14,6 @@ export class FormQuestionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog$: DialogService,
-    private session$: SessionService,
     private firebase$: FirebaseService,
     private router: Router,
     private route: ActivatedRoute
@@ -46,6 +45,7 @@ export class FormQuestionComponent implements OnInit {
       this.answers.at(0).patchValue({ status: true });
     }
   }
+
   buildForm() {
     this.questionForm = this.fb.group({
       question: [this.question?.question ?? '', Validators.required],
@@ -58,21 +58,22 @@ export class FormQuestionComponent implements OnInit {
       ),
     });
   }
+
   createAnswer(item?: any): FormGroup {
     return this.fb.group({
       name: [item?.name ?? '', Validators.required],
       status: [item?.status ?? false, Validators.required],
     });
   }
+
   addAnswer() {
     this.answers.push(this.createAnswer());
   }
+
   removeAnswer(index: number) {
     this.answers.removeAt(index);
   }
-  onSelectMultiAnswer(value: any) {
-    console.log(value);
-  }
+
   clearCheckbox(index: number) {
     if (this.questionForm.value.multiAnswer == false) {
       for (let i = 0; i < this.answers.controls.length; i++) {
@@ -92,6 +93,7 @@ export class FormQuestionComponent implements OnInit {
     this.questionForm.patchValue({ type: 'text' });
     this.answers.at(0).patchValue({ status: true });
   }
+  
   onSubmit(value: any) {
     this.submitted = true;
     if(this.questionId){
@@ -108,13 +110,13 @@ export class FormQuestionComponent implements OnInit {
     };
     console.log(newQuestionsForm);
     this.firebase$.addQuestions(newQuestionsForm).then((value) => {
-      this.dialog$.openSnackBar();
+      this.dialog$.openSnackBar('Thêm câu hỏi thành công','success')
       this.router.navigate(['../../'], { relativeTo: this.route });
     });
   }
   private editQuestion(questionID: string, valueForm: any) {
     this.firebase$.editQuestions(questionID, valueForm).then((value) => {
-      this.dialog$.openSnackBar();
+      this.dialog$.openSnackBar('Sửa câu hỏi thành công','success')
       this.router.navigate(['../../'], { relativeTo: this.route });
     });
   }
