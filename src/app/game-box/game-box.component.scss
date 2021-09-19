@@ -196,7 +196,7 @@ section .option_list .option.select {
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
   & img {
     max-width: 100%;
-    
+
   }
   & .complete_text {
     font-size: 20px;
@@ -264,5 +264,10 @@ section .option_list .option.select {
   }
   .bg {
     display: none;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .box  {
+    padding: 5px;
   }
 }

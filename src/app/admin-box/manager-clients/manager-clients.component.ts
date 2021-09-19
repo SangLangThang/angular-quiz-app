@@ -94,6 +94,12 @@ export class ManagerClientsComponent implements OnInit {
     );
   }
 
+  deleteClients() {
+    this.clients.map((x: any) => {
+      this.deleteClient(x.id)
+    })
+  }
+
   deleteClient(id: string) {
     this.firebase$.deleteClient(id).then((_) => this.getClients());
   }
