@@ -102,8 +102,7 @@ export class FirebaseService {
   getQuestions(topicId: string) {
     return this.firestore
       .collection('questions', (ref) => ref.where('topicId', '==', topicId))
-      .valueChanges({ idField: 'questionId' })
-      .pipe(take(1));
+      .valueChanges({ idField: 'questionId' });
   }
   getQuestion(id: string) {
     return this.firestore.collection('questions').doc(id).valueChanges();

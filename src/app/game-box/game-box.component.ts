@@ -1,47 +1,21 @@
-import { SessionService } from '../shared/session.service';
 import {
   Component,
   ElementRef,
   OnInit,
   QueryList,
   Renderer2,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { ClientForm, QuestionsForm } from 'src/app/models/User.model';
+import { Router } from '@angular/router';
+import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
+import { SessionService } from '../shared/session.service';
 @Component({
   selector: 'app-game-box',
   templateUrl: './game-box.component.html',
   styleUrls: ['./game-box.component.scss'],
 })
 export class GameBoxComponent implements OnInit {
-  constructor(
-    private renderer: Renderer2,
-    private routes: ActivatedRoute,
-    private firebase$: FirebaseService,
-    private session$:SessionService
-  ) {}
-
-  @ViewChildren('option') options: QueryList<ElementRef>;
-
-  ngOnInit(): void {
-    this.clientId = this.session$.getClientId()
-    this.topicId = this.session$.getClientTopicId()
-    console.log('client',this.clientId)
-    console.log('topic',this.topicId)
-    this.firebase$.getClient(this.clientId).subscribe((client: any) => {
-      this.clientData = client;
-      this.client = client.name;
-    });
-    this.firebase$.getQuestions(this.topicId).subscribe((questions: any) => {
-      this.questions = questions;
-      this.ques_total = questions.length;
-      if(this.ques_total>0){
-        this.startGame();
-      }
-    });
-  }
   /* UI */
   showBackground=true
   /* load data for game */
@@ -53,7 +27,6 @@ export class GameBoxComponent implements OnInit {
   /* variable start game */
   clientId: string;
   topicId: string;
-  clientData: ClientForm;
   text_btn_next = 'Câu tiếp theo';
   time_start = 15;
   percent = '0%';
@@ -64,9 +37,46 @@ export class GameBoxComponent implements OnInit {
   start: any;
   result_icon = '🎉';
   result_slogan = 'Thật tuyệt!';
-  client = '';
+  client: any;
   can_next_question = false;
   /* game function */
+
+  constructor(
+    private renderer: Renderer2,
+    private router: Router,
+    private firebase$: FirebaseService,
+    private session$:SessionService
+  ) {}
+
+  @ViewChildren('option') options: QueryList<ElementRef>;
+
+  ngOnInit(): void {
+    this.clientId = this.session$.getClientId();
+    this.topicId = this.session$.getClientTopicId();
+    this.getQuestions();
+    this.getClient();
+  }
+
+  getQuestions() {
+    this.firebase$.getClient(this.clientId)
+      .subscribe((client: any) => {
+        this.client = client;
+      });
+  }
+
+  getClient() {
+    this.firebase$.getQuestions(this.topicId)
+      .subscribe((questions: any) => {
+        if(questions?.length <= 0)
+          this.router.navigate(['/'])
+        this.questions = questions;
+        this.ques_total = questions.length;
+        if(this.ques_total>0){
+          this.startGame();
+        }
+      });
+  }
+
   startGame() {
     this.time_start = 15;
     this.percent = '0%';

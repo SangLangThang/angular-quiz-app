@@ -36,7 +36,7 @@ export class ManagerQuestionsComponent implements OnInit {
   getLevels() {
     this.firebase$.getLevels()
       .subscribe((levels: any[]) => {
-        this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));;
+        this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.currentLevelId = this.levels[0].levelId;
         this.getTopics();
       });
@@ -45,7 +45,7 @@ export class ManagerQuestionsComponent implements OnInit {
   getTopics() {
     this.firebase$.getTopicsWithLevelId(this.currentLevelId)
       .subscribe((topics: any[]) => {
-        this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));;
+        this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.currentTopicId = this.topics[0].topicId
         this.getQuestions();
       });
@@ -54,7 +54,7 @@ export class ManagerQuestionsComponent implements OnInit {
   getQuestions() {
     this.firebase$.getQuestions(this.currentTopicId)
       .subscribe((questions: any[]) => {
-        this.questions = questions.sort((a, b) => (a.name < b.name ? -1 : 1));;
+        this.questions = questions.sort((a, b) => (a.name < b.name ? -1 : 1));
       });
   }
 
