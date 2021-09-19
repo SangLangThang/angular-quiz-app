@@ -1,7 +1,7 @@
 .box {
   background-color: #fff;
   margin: 0 auto;
-  
+
   border-radius: 5px;
 }
 .box-form {
@@ -44,9 +44,12 @@
   }
 }
 
-@media only screen and (max-width: 760px) {
+.btn-danger {
+  margin-right: 1rem;
+}
+
+@media only screen and (max-width: 767px) {
   .box-form {
-    
     padding: 20px 5px;
   }
   .custom-flex {
