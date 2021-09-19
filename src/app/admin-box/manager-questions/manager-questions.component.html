@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <div class="">
+  <div class="row">
     <div class="col-12">
       <ul class="nav nav-tabs" *ngIf="topics">
         <ng-container *ngFor="let topic of topics;">
@@ -36,25 +36,27 @@
         </ng-container>
       </ul>
       <ul class="list-question" >
-        <li class="item" *ngFor="let question of questions;let i =index;" #templateQuestion (click)="toggleAnswer(i)">
-          <div class="d-flex gx-1">
-            <div class="flex-grow-1 item-name">
-              <p>{{question.question}}</p>
-              <ul class="col-11 item-answer">
-                <li class="answer" *ngFor="let answer of question.answers;let j = index;"> {{answer.name}}
-                  <mat-icon color="primary" *ngIf="answer.status===true">check_circle</mat-icon>
-                </li>
-              </ul>
+        <ng-container *ngFor="let question of questions;let i =index;">
+          <li class="item" [class.show]="toggle.includes(i)" (click)="toggleAnswer(i)">
+            <div class="d-flex gx-1">
+              <div class="flex-grow-1 item-name">
+                <p>{{question.question}}</p>
+                <ul class="col-11 item-answer">
+                  <li class="answer" *ngFor="let answer of question.answers;let j = index;"> {{answer.name}}
+                    <mat-icon color="primary" *ngIf="answer.status===true">check_circle</mat-icon>
+                  </li>
+                </ul>
+              </div>
+              <div class="item-btn">
+                <button type="button" class="btn btn-primary me-1"
+                  [routerLink]="['edit',question.questionId]">Sửa</button>
+                <button type="button" class="btn btn-danger" (click)="deleteQuestion(question.questionId)">Xoá</button>
+              </div>
             </div>
-            <div class="item-btn">
-              <button type="button" class="btn btn-primary me-1"
-                [routerLink]="['edit',question.questionId]">Sửa</button>
-              <button type="button" class="btn btn-danger" (click)="deleteQuestion(question.questionId)">Xoá</button>
-            </div>
-          </div>
-        </li>
-        <button type="button" [disabled]="topics?.length==0"  class="btn btn-primary mt-1" [routerLink]="['new',currentTopicId]">Thêm</button>
+          </li>
+        </ng-container>
       </ul>
+      <button type="button" [disabled]="topics?.length==0"  class="btn btn-primary mt-1" [routerLink]="['new',currentTopicId]">Thêm</button>
     </div>
   </div>
 </div>

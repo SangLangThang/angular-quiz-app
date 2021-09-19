@@ -11,7 +11,6 @@ import { FirebaseService } from 'src/app/shared/firebase.service';
   styleUrls: ['./manager-clients.component.scss'],
 })
 export class ManagerClientsComponent implements OnInit {
-  constructor(private firebase$: FirebaseService) {}
   clients: ClientForm[] = [];
   levels: string[];
   topics: string[];
@@ -20,84 +19,36 @@ export class ManagerClientsComponent implements OnInit {
   selectedLevel = 'all';
   selectedTopic = 'all';
   clientsCache: ClientForm[] = [];
-
+  
   @ViewChild('pdfTable') pdftable: ElementRef;
+  
+  constructor(private firebase$: FirebaseService) {}
 
   ngOnInit(): void {
     this.getClients();
-    this.getLevels();
-    this.getTopics();
   }
 
   getClients() {
     this.firebase$.getClients().subscribe((clients: any) => {
       this.clients = clients;
-      this.school = this.deduplicate(this.clients.map((e) => e.school));
+      this.clientsCache=clients
+      this.levels = this.deduplicate(this.clients.map((e) => e.levelId));
+      this.topics = this.deduplicate(this.clients.map((e) => e.topicId));
     });
   }
 
-  getLevels() {
-    this.firebase$.getLevels().subscribe((levels: any) => {
-      this.levels = this.deduplicate(levels.map((e: any) => e.name));
-    });
-  }
-
-  getTopics() {
-    this.firebase$.getTopics().subscribe((topics: any) => {
-      this.topics = this.deduplicate(topics.map((e: any) => e.name));
-    });
-  }
-
-  filterLevel() {
-    if (this.selectedLevel === 'all' && this.selectedTopic === 'all') {
-      this.clients = [...this.clientsCache];
-      return;
-    }
-    if (this.selectedLevel === 'all') {
-      this.clients = this.clientsCache.filter(
-        (x: any) => x.topicId === this.selectedTopic
-      );
-      return;
-    }
-    if (this.selectedTopic !== 'all') {
-      this.clients = this.clientsCache.filter(
-        (x: any) =>
-          x.levelId === this.selectedLevel && x.topicId === this.selectedTopic
-      );
-      return;
-    }
-    this.clients = this.clientsCache.filter(
-      (x: any) => x.levelId === this.selectedLevel
-    );
-  }
-
-  filterTopic() {
-    if (this.selectedLevel === 'all' && this.selectedTopic === 'all') {
-      this.clients = [...this.clientsCache];
-      return;
-    }
-    if (this.selectedTopic === 'all') {
-      this.clients = this.clientsCache.filter(
-        (x: any) => x.levelId === this.selectedLevel
-      );
-      return;
-    }
-    if (this.selectedLevel !== 'all') {
-      this.clients = this.clientsCache.filter(
-        (x: any) =>
-          x.topicId === this.selectedTopic && x.levelId === this.selectedLevel
-      );
-      return;
-    }
-    this.clients = this.clientsCache.filter(
-      (x: any) => x.topicId === this.selectedTopic
-    );
+  filterAll(){
+    this.clients=this.clientsCache.filter(e=>{
+      let filterByLevel=e.levelId===this.selectedLevel || this.selectedLevel==='all' //true or false
+      let filterByTopic=e.topicId===this.selectedTopic || this.selectedTopic==='all'
+      return filterByLevel && filterByTopic
+    })
   }
 
   deleteClients() {
     this.clients.map((x: any) => {
-      this.deleteClient(x.id)
-    })
+      this.deleteClient(x.id);
+    });
   }
 
   deleteClient(id: string) {
