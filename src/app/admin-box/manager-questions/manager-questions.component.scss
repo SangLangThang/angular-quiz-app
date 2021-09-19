@@ -3,15 +3,8 @@
   padding: 10px;
   overflow: hidden;
 }
-
 .nav-item {
   cursor: pointer;
-}
-.box-container {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  align-items: center;
 }
 .box-level {
   .item {
@@ -29,11 +22,9 @@
       0 1px 5px 0 #0000001f;
     margin-bottom: 10px;
     padding: 10px;
+    padding-bottom: 0px;
     border-radius: 4px;
-    overflow: hidden;
-    transition: margin 225ms cubic-bezier(0.4, 0, 0.2, 1),
-      box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
+    width: calc(100% - 120px);
     &:first-child {
       margin-top: 10px;
       margin-right: 10px;
@@ -50,6 +41,7 @@
   }
   .item-btn {
     margin-top: 10px;
+    width: 120px;
   }
   .item.show{
     .item-answer{
@@ -73,13 +65,6 @@ li {
   .box-level {
     button {
       height: 40px;
-    }
-  }
-  .questions {
-    flex-wrap: wrap;
-    .question {
-      flex: none;
-      width: 100%;
     }
   }
 }

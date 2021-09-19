@@ -28,15 +28,10 @@
   font-family: Iciel;
 }
 .header {
-  // display: flex;
-  // justify-content: space-between;
-  // align-items: center;
+  & h2 {
+    margin-bottom: 0;
+  }
   background-color: #3f51b5;
-  // &-logo {
-  //   display: flex;
-  //   justify-content: center;
-  //   align-items: center;
-  // }
 }
 
 @media only screen and (max-width: 767px) {
