@@ -31,7 +31,6 @@ export class ManagerClientsComponent implements OnInit {
 
   getClients() {
     this.firebase$.getClients().subscribe((clients: any) => {
-      console.log('debugger client: ', clients);
       this.clients = clients;
       this.school = this.deduplicate(this.clients.map((e) => e.school));
     });
@@ -116,13 +115,13 @@ export class ManagerClientsComponent implements OnInit {
       pdf.save('ReportPdf.pdf');
     });
   }
+
   printExcel() {
     const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(
       this.pdftable.nativeElement
     );
     const wb: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    /* save to file */
     XLSX.writeFile(wb, 'SheetJS.xlsx');
   }
 }
