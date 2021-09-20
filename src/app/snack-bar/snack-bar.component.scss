@@ -1,0 +1,11 @@
+.mat-snack-bar-container{
+    border-radius: 5px;
+    text-align: center;
+    &.success{
+        color: deeppink;
+
+    }
+    &.fail{
+        color: red;
+    }
+}

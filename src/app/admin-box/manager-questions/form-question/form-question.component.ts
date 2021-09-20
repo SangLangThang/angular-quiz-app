@@ -94,7 +94,7 @@ export class FormQuestionComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-    this.submitted = true;
+    
     if(this.questionId){
       this.editQuestion(this.questionId,value)
       return
@@ -108,11 +108,15 @@ export class FormQuestionComponent implements OnInit {
       ...valueForm,
     };
     this.firebase$.addQuestions(newQuestionsForm)
-      .then();
+      .then(()=>{
+        this.reset()
+        this.submitted = true;
+      });
   }
   private editQuestion(questionID: string, valueForm: any) {
     this.firebase$.editQuestions(questionID, valueForm)
       .then(() => {
+        this.submitted = true;
         this.router.navigate(['../../'], { relativeTo: this.route });
       });
   }
