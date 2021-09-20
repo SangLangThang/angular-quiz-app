@@ -1,10 +1,10 @@
+import { GameService } from './../../shared/game.service';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { Levels, Topics } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
-import { SessionService } from './../../shared/session.service';
 
 @Component({
   selector: 'app-form-client-modal',
@@ -24,12 +24,11 @@ export class FormClientModalComponent implements OnInit {
     private fb: FormBuilder,
     private firebase$: FirebaseService,
     private router: Router,
-    private session$: SessionService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private game$:GameService
   ) {}
 
   ngOnInit(): void {
-    // this.session$.clearSesstion();
     this.getLevels();
   }
 
@@ -39,7 +38,6 @@ export class FormClientModalComponent implements OnInit {
         this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.currentLevelId = this.levels[0].levelId;
         this.getTopics();
-        // this.clientForm.get('levelId')?.setValue(this.currentLevelId);
       });
   }
 
@@ -49,8 +47,6 @@ export class FormClientModalComponent implements OnInit {
         this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.defaultTopic = this.topics[0].topicId;
         this.buildForm();
-        // this.topics = this.selectedTopics(this.currentLevelId, this.topicsData);
-        // this.clientForm.get('topicId')?.setValue(this.topics[0].topicId);
       });
   }
 
@@ -63,15 +59,6 @@ export class FormClientModalComponent implements OnInit {
       levelId: [this.currentLevelId ?? null, [Validators.required]],
     });
   }
-  // selectedTopics(levelId: string, topics: Topics[]): Topics[] {
-  //   let result = topics.filter((topic) => topic.levelId === levelId);
-  //   this.clientForm.get('topicId')?.setValue(result[0].topicId);
-  //   return result;
-  // }
-
-  // onLevelChange(levelId: any) {
-  //   this.topics = this.selectedTopics(levelId, this.topicsData);
-  // }
   onSubmit() {
     this.isCreating = true;
     const newClient = {
@@ -81,11 +68,9 @@ export class FormClientModalComponent implements OnInit {
       topicId: this.getNameTopic(this.clientForm.value.topicId),
       levelId: this.getNameLevel(this.clientForm.value.levelId),
     };
-    this.session$.setClientTopicId(this.clientForm.value.topicId);
-    this.session$.setClientLevelId(this.clientForm.value.levelId);
     this.firebase$.addClient(newClient)
       .then((value) => {
-        this.session$.setClientId(value.id);
+        this.game$.setDataClient(value.id,this.clientForm.value.topicId)
         this.isCreating = false;
         this.firebase$.isCreatedClient=true
         this.dialog.closeAll();

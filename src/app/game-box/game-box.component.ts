@@ -1,15 +1,8 @@
-import {
-  Component,
-  ElementRef,
-  OnInit,
-  QueryList,
-  Renderer2,
-  ViewChildren
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
-import { SessionService } from '../shared/session.service';
+import { GameService } from '../shared/game.service';
 @Component({
   selector: 'app-game-box',
   templateUrl: './game-box.component.html',
@@ -17,142 +10,114 @@ import { SessionService } from '../shared/session.service';
 })
 export class GameBoxComponent implements OnInit {
   /* UI */
-  showBackground=true
-  /* load data for game */
+  showBackground = true;
   showResult = false;
   showGame = true;
+  /* Data from sever */
   questions: QuestionsForm[] = [];
-  ques_total = 0;
-  multiAnswer = false;
-  /* variable start game */
-  clientId: string;
-  topicId: string;
-  text_btn_next = 'Câu tiếp theo';
-  time_start = 15;
-  percent = '0%';
-  ques_start = 0;
-  hasSelected: { index: number; status: boolean }[] = [];
-  score = 0;
-  correct = 0;
-  start: any;
-  result_icon = '🎉';
-  result_slogan = 'Thật tuyệt!';
+  dataInit = {
+    clientId: '',
+    topicId: '',
+  };
+
   client: any;
-  can_next_question = false;
-  /* game function */
+
+  start: any;
+  time_start = 35;
+  percent_time = '0%';
+  ques_total = 0;
+  user_select: number[] = [];
+  currentQuestion: number = 0;
+  score = 0;
+  result_info = [
+    ['🎉', 'Thật tuyệt!'],
+    ['😎', 'Chúc mừng!'],
+    ['😐', 'Thật tiếc!'],
+  ];
+  seletSlogan = 0;
 
   constructor(
-    private renderer: Renderer2,
     private router: Router,
     private firebase$: FirebaseService,
-    private session$:SessionService
+    private game$: GameService
   ) {}
 
-  @ViewChildren('option') options: QueryList<ElementRef>;
-
   ngOnInit(): void {
-    this.clientId = this.session$.getClientId();
-    this.topicId = this.session$.getClientTopicId();
+    this.dataInit = this.game$.getDataClient();
+    console.log(this.dataInit)
     this.getQuestions();
     this.getClient();
   }
 
-  getQuestions() {
-    this.firebase$.getClient(this.clientId)
+  getClient() {
+    this.firebase$
+      .getClient(this.dataInit.clientId)
       .subscribe((client: any) => {
         this.client = client;
       });
   }
 
-  getClient() {
-    this.firebase$.getQuestions(this.topicId)
+  getQuestions() {
+    this.firebase$
+      .getQuestions(this.dataInit.topicId)
       .subscribe((questions: any) => {
-        if(questions?.length <= 0)
-          this.router.navigate(['/'])
+        if (questions?.length <= 0) this.router.navigate(['/']);
         this.questions = questions;
         this.ques_total = questions.length;
-        if(this.ques_total>0){
+        if (this.ques_total > 0) {
           this.startGame();
+          this.questions.forEach((e) => this.user_select.push(-1));
         }
       });
   }
 
   startGame() {
-    this.time_start = 15;
-    this.percent = '0%';
     this.start = setInterval(() => {
       this.time_start--;
-      this.percent = `${((15 - this.time_start) * 100) / 15}%`;
+      this.percent_time = `${((35 - this.time_start) * 100) / 35}%`;
+      if (this.time_start === 34) {
+      }
       if (this.time_start === 0) {
         clearInterval(this.start);
-        this.optionSelected(this.ques_start,1000, false);
+        this.endGame();
       }
-    }, 1000);
+    }, 60000);
   }
 
   endGame() {
-    this.showBackground=false
-    if (this.score > 3) {
-      this.result_icon = '🎉';
-      this.result_slogan = 'Thật tuyệt!';
-    } else {
-      if (this.score > 1) {
-        this.result_icon = '😎';
-        this.result_slogan = 'Chúc mừng!';
-      } else {
-        this.result_icon = '😐';
-        this.result_slogan = 'Thật tiếc!';
-      }
-    }
+    this.showBackground = false;
+    this.calculatorScore();
     this.showGame = false;
     this.showResult = true;
-    this.firebase$.updateClient(this.clientId, this.score, Date.now());
+    this.firebase$.updateClient(this.dataInit.topicId, this.score, Date.now());
   }
+
   nextQuestion() {
-    if (this.ques_start < this.ques_total) {
-      this.startGame();
-      this.ques_start++;
-    }
-    if (this.ques_start === this.ques_total - 1) {
-      this.text_btn_next = 'Hoàn thành';
-    }
-    if (this.ques_start === this.ques_total) {
+    this.currentQuestion++;
+    if (this.currentQuestion === this.ques_total) {
       this.endGame();
     }
-    this.can_next_question = false;
   }
-  optionSelected(questionIndex: number, select: number, answer: boolean) {
-    if (this.multiAnswer === true) {
-      /* this.options.forEach((ele: ElementRef, i: number) => {
-        if (i === select) this.renderer.addClass(ele.nativeElement, 'select');
-        this.hasSelected.push({ index: select, status: answer });
-      }); */
-    } else {
-      this.hasSelected.push({ index: select, status: answer });
-      this.can_next_question = true;
-      clearInterval(this.start);
-      this.options.forEach((ele: ElementRef, i: number) => {
-        if (select === i) {
-          if (answer) {
-            this.score++;
-            this.renderer.addClass(ele.nativeElement, 'correct');
-          } else {
-            this.renderer.addClass(ele.nativeElement, 'incorrect');
-            this.optionSelectedFull(this.questions[questionIndex])
-          }
-        }else{
-          this.optionSelectedFull(this.questions[questionIndex])
-        }
-      });
-    }
+
+  optionSelected(questionIndex: number, select: number) {
+    this.user_select[questionIndex] = select;
   }
-  optionSelectedFull(question: QuestionsForm) {
-    this.options.forEach((ele: ElementRef, i: number) => {
-      this.hasSelected.forEach((e) => {
-        if (e.index != i && question.answers[i].status === true) {
-          this.renderer.addClass(ele.nativeElement, 'correct');
-        }
-      });
+
+  calculatorScore() {
+    this.user_select.forEach((e, i) => {
+      console.log(this.questions[i].answers[e].status);
+      if (this.questions[i].answers[e].status === true) this.score++;
     });
+    let percent = (this.score * 100) / this.ques_total;
+    //  < 10% => nood, <60% => medium, >60 % =>good
+    if (percent < 10) {
+      this.seletSlogan = 2;
+    } else {
+      if (percent < 60) {
+        this.seletSlogan = 1;
+      } else {
+        this.seletSlogan = 0;
+      }
+    }
   }
 }
