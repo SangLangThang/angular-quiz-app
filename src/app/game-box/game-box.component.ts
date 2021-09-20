@@ -75,8 +75,6 @@ export class GameBoxComponent implements OnInit {
     this.start = setInterval(() => {
       this.time_start--;
       this.percent_time = `${((35 - this.time_start) * 100) / 35}%`;
-      if (this.time_start === 34) {
-      }
       if (this.time_start === 0) {
         clearInterval(this.start);
         this.endGame();
@@ -105,7 +103,6 @@ export class GameBoxComponent implements OnInit {
 
   calculatorScore() {
     this.user_select.forEach((e, i) => {
-      console.log(this.questions[i].answers[e].status);
       if (this.questions[i].answers[e].status === true) this.score++;
     });
     let percent = (this.score * 100) / this.ques_total;
