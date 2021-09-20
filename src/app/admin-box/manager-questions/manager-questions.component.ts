@@ -56,6 +56,7 @@ export class ManagerQuestionsComponent implements OnInit {
     this.firebase$
       .getQuestions(this.currentTopicId)
       .subscribe((questions: any[]) => {
+        console.log(questions)
         this.questions = questions.sort((a, b) => (a.name < b.name ? -1 : 1));
         this.questions.forEach((e) => this.toggle.push(true));
       });

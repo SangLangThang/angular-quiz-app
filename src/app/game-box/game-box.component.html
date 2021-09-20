@@ -3,7 +3,7 @@
     <img src="../../assets/loading.jpg" alt="">
   </div>
   <div class="game-box" *ngIf="showGame">
-    <div class="alert alert-danger" *ngIf="time_start <= 2">
+    <div class="alert alert-danger" *ngIf="time_start <= time_alert">
       Sắp hết thời gian. Còn <b>{{time_start}}</b> phút !!!
     </div>
     <header>

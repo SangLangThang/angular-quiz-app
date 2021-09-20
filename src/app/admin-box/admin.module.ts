@@ -6,9 +6,11 @@ import { UploadFileComponent } from './manager-questions/upload-file/upload-file
 import { AdminBoxComponent } from './admin-box.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { ManagerClientsComponent } from './manager-clients/manager-clients.component';
-// import { ReportBoxGridComponent } from './manager-clients/report-box-grid/report-box-grid.component';
 import { FormQuestionComponent } from './manager-questions/form-question/form-question.component';
 import { ManagerQuestionsComponent } from './manager-questions/manager-questions.component';
+import { SettingComponent } from './setting/setting.component';
+import { MAT_DATE_LOCALE } from '@angular/material/core'
+import { NgxMatDatetimePickerModule,NgxMatNativeDateModule,NgxMatTimepickerModule,} from '@angular-material-components/datetime-picker';
 
 @NgModule({
   imports: [
@@ -17,14 +19,21 @@ import { ManagerQuestionsComponent } from './manager-questions/manager-questions
     ReactiveFormsModule,
     FormsModule,
     AdminRoutingModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
   ],
   declarations: [
     ManagerQuestionsComponent,
     ManagerClientsComponent,
     AdminBoxComponent,
     FormQuestionComponent,
-    // ReportBoxGridComponent,
-    UploadFileComponent
+    UploadFileComponent,
+    SettingComponent
+  ],
+  providers: [
+    {provide: MAT_DATE_LOCALE, useValue: 'en-GB',},
   ],
 })
 export class AdminModule {}
+

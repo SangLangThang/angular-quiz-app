@@ -1,0 +1,43 @@
+<div *ngIf="settingsForm">
+  <form class="form" [formGroup]="settingsForm" (ngSubmit)="onSubmit(settingsForm.value)">
+    <div class="row align-items-center">
+      <span class="col-12 col-sm-6">Thời gian bắt đầu cuộc thi</span>
+      <div class="col-12 col-sm-6 input">
+        <mat-form-field appearance="outline">
+          <input matInput [ngxMatDatetimePicker]="event_start" formControlName="event_start">
+          <mat-datepicker-toggle matSuffix [for]="$any(event_start)"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker [showSeconds]="true" [enableMeridian]="true" #event_start></ngx-mat-datetime-picker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <span class="col-12 col-sm-6">Thời gian kết thúc cuộc thi</span>
+      <div class=" col-12 col-sm-6 input">
+        <mat-form-field appearance="outline">
+          <input matInput [ngxMatDatetimePicker]="event_end"  formControlName="event_end">
+          <mat-datepicker-toggle matSuffix [for]="$any(event_end)"></mat-datepicker-toggle>
+          <ngx-mat-datetime-picker [showSeconds]="true" [enableMeridian]="true" #event_end></ngx-mat-datetime-picker>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <span class="col-12 col-sm-6">Tổng thời gian làm bài</span>
+      <div class=" col-12 col-sm-6 input">
+        <mat-form-field appearance="outline">
+          <input matInput type="number" formControlName="time_total">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <span class="col-12 col-sm-6">Thời gian cảnh báo sắp hết giờ</span>
+      <div class=" col-12 col-sm-6 input">
+        <mat-form-field appearance="outline">
+          <input matInput type="number" formControlName="time_alert">
+        </mat-form-field>
+      </div>
+    </div>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!settingsForm.valid">
+      Xác nhận
+    </button>
+  </form>
+</div>
