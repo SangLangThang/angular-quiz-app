@@ -35,8 +35,6 @@ export class GameBoxComponent implements OnInit {
     ['😐', 'Thật tiếc!'],
   ];
   seletSlogan = 0;
-  m: number;
-  s: number;
 
   constructor(
     private router: Router,
@@ -48,18 +46,6 @@ export class GameBoxComponent implements OnInit {
     this.dataInit = this.game$.getDataClient();
     this.getQuestions();
     this.getClient();
-  }
-
-  countDown(h: number) {
-    const second = 1000,
-        minute = second * 60,
-        hour = minute * 60;
-    const x = setInterval(() => {
-      const  distance = h - new Date().getTime();
-      this.m = Math.floor((distance % (hour)) / (minute)),
-      this.s = Math.floor((distance % (minute)) / second);
-      clearInterval(x);
-    }, 0);
   }
 
   getClient() {
