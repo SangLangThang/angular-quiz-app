@@ -3,25 +3,27 @@
     <img src="../../assets/loading.jpg" alt="">
   </div>
   <div class="game-box" *ngIf="showGame">
+    <div class="alert alert-danger" *ngIf="time_start <= 2">
+      Sắp hết thời gian. Còn {{time_start}} phút !!!
+    </div>
     <header>
       <div class="title">Tìm hiểu kiến thức ATGT</div>
       <div class="timer">
         <div class="time_left_txt">Thời gian còn lại</div>
         <div class="timer_sec">{{ time_start }}</div>
       </div>
-      <div class="time_line" [style.width]="percent"></div>
+      <div class="time_line" [style.width]="percent_time"></div>
     </header>
     <!-- section -->
-    <section *ngFor="let question of questions; index as i" [class.hide]="i !== ques_start">
-      <div *ngIf="i == ques_start">
-        <div class="que_text">
-          <span>
-            {{ question.question }}
-          </span>
-        </div>
-        <div class="option_list" [class.flex]="question.type==='picture'">
-          <div class="option" #option *ngFor="let option of question.answers; index as j"
-            (click)="optionSelected(i,j, option.status)">
+    <section *ngFor="let question of questions; let i = index" [class.hide]="i !== currentQuestion">
+      <div class="que_text">
+        <span>
+          {{ question.question }}
+        </span>
+      </div>
+      <div class="option_list" [class.flex]="question.type==='picture'">
+        <ng-container *ngFor="let option of question.answers; let j = index">
+          <div class="option" [class.correct]="user_select[i]==j" (click)="optionSelected(i,j)">
             <span *ngIf="question.type==='picture'; else nopicture" class="option_img">
               <img [src]="option.name">
             </span>
@@ -29,26 +31,26 @@
               <span>{{ option.name }}</span>
             </ng-template>
             <mat-icon class="icon tick">check</mat-icon>
-            <mat-icon class="icon cross">close</mat-icon>
-            <mat-icon class="icon plus">control_point</mat-icon>
           </div>
-        </div>
+        </ng-container>
       </div>
     </section>
 
     <!-- footer -->
     <footer>
       <div class="total_que">
-        <span>
-          <p>{{ ques_start + 1 }}</p>
-          trên
-          <p>{{ ques_total }}</p>
-          Câu hỏi
-        </span>
+          Số lượng : <span>{{ ques_total }}</span> câu hỏi
       </div>
-      <button type="button" mat-raised-button color="primary" (click)="nextQuestion()" [disabled]="!can_next_question">
-        {{ text_btn_next }}
-      </button>
+      <div class="footer-btn">
+        <button type="button" class='me-1' [disabled]="currentQuestion==0" mat-raised-button color="primary"
+          (click)="currentQuestion=currentQuestion-1">
+          Câu trước
+        </button>
+        <button type="button" mat-raised-button color="primary" (click)="nextQuestion()">
+          <span *ngIf="currentQuestion < ques_total - 1">Câu tiếp theo</span>
+          <span *ngIf="currentQuestion === ques_total - 1">Hoàn thành</span>
+        </button>
+      </div>
     </footer>
   </div>
 
@@ -56,7 +58,7 @@
     <img src="../../assets/IMG_0718.JPG" alt="" />
     <div class="complete_text">Bạn đã hoàn thành bài kiểm tra!</div>
     <div class="score_text">
-      <span>{{ result_slogan }}! {{ result_icon }}, {{ client.name }} đạt
+      <span>{{ result_info[seletSlogan][1] }}! {{ result_info[seletSlogan][0] }}, {{ client.name }} đạt
         <p>{{ score }}</p>
         trên tổng số
         <p>{{ ques_total }}</p>

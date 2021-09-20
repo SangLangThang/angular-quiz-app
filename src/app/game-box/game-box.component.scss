@@ -61,26 +61,6 @@
   }
 }
 
-footer {
-  height: 60px;
-  padding: 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-top: 1px solid lightgrey;
-  & .total_que span {
-    display: flex;
-    user-select: none;
-    & p {
-      font-weight: 500;
-      padding: 0 5px;
-      &:first-child {
-        padding-left: 0px;
-      }
-    }
-  }
-}
-
 section {
   padding: 25px 30px 20px 30px;
   background: #fff;
@@ -196,7 +176,6 @@ section .option_list .option.select {
   box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
   & img {
     max-width: 100%;
-
   }
   & .complete_text {
     font-size: 20px;
@@ -224,10 +203,25 @@ section .option_list .option.select {
 .box {
   position: relative;
   width: 100%;
-  height: calc(100vh - 110px);
+  min-height: calc(100vh - 100px);
   display: flex;
   justify-content: center;
   align-items: center;
+}
+footer {
+  height: 60px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid lightgrey;
+  & .total_que {
+    user-select: none;
+    & span {
+      font-weight: 500;
+      padding: 0 5px;
+    }
+  }
 }
 .bg {
   width: 100%;
@@ -258,7 +252,7 @@ section .option_list .option.select {
       padding: 0 5px;
     }
   }
-  .result_box{
+  .result_box {
     width: 100%;
     box-shadow: none;
   }
@@ -267,7 +261,7 @@ section .option_list .option.select {
   }
 }
 @media only screen and (max-width: 767px) {
-  .box  {
+  .box {
     padding: 5px;
   }
 }
