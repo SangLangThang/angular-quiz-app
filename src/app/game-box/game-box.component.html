@@ -4,13 +4,15 @@
   </div>
   <div class="game-box" *ngIf="showGame">
     <div class="alert alert-danger" *ngIf="time_start <= 2">
-      Sắp hết thời gian. Còn {{time_start}} phút !!!
+      Sắp hết thời gian. Còn <b>{{time_start}}</b> phút !!!
     </div>
     <header>
       <div class="title">Tìm hiểu kiến thức ATGT</div>
       <div class="timer">
-        <div class="time_left_txt">Thời gian còn lại</div>
+        <!-- <div class="time_left_txt">Thời gian còn</div>
         <div class="timer_sec">{{ time_start }}</div>
+        <div class="time_right_txt">phút</div> -->
+        <countdown [config]="{leftTime: time_start*60}"></countdown>
       </div>
       <div class="time_line" [style.width]="percent_time"></div>
     </header>
@@ -39,7 +41,7 @@
     <!-- footer -->
     <footer>
       <div class="total_que">
-          Số lượng : <span>{{ ques_total }}</span> câu hỏi
+        Số lượng: <span>{{ ques_total }}</span> câu hỏi
       </div>
       <div class="footer-btn">
         <button type="button" class='me-1' [disabled]="currentQuestion==0" mat-raised-button color="primary"
