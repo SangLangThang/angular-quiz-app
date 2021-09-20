@@ -44,7 +44,6 @@ export class GameBoxComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataInit = this.game$.getDataClient();
-    console.log(this.dataInit)
     this.getQuestions();
     this.getClient();
   }
