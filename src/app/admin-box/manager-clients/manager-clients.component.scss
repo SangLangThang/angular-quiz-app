@@ -6,3 +6,8 @@
   margin-right: 10px;
 }
 
+@media only screen and (max-width: 1024px) {
+  .btn {
+    padding: .375rem;
+  }
+}
