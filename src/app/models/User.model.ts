@@ -1,3 +1,6 @@
+import { Time } from "@angular/common";
+import { Timestamp } from "rxjs";
+
 export interface ILogin {
   username: string;
   password: string;
@@ -33,4 +36,10 @@ export interface ClientForm {
   levelId: string;
   score: number;
   time: number;
+}
+export interface SettingsForm {
+  event_start: number;
+  event_end: number,
+  time_total: number,
+  time_alert: number,
 }

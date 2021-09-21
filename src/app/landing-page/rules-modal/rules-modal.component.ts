@@ -1,3 +1,5 @@
+import { SettingsForm } from './../../models/User.model';
+import { FirebaseService } from 'src/app/shared/firebase.service';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,9 +9,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RulesModalComponent implements OnInit {
 
-  constructor() { }
-
+  constructor(private firebase$:FirebaseService) { }
+  time:number
   ngOnInit(): void {
+    this.firebase$.getConfig().subscribe((config:any)=>{
+      this.time=config[0].time_total
+    })
   }
 
 }

@@ -30,6 +30,10 @@
 .header {
   & h2 {
     margin-bottom: 0;
+    & img,
+    & h3 {
+      cursor: pointer;
+    }
   }
   background-color: #3f51b5;
 }

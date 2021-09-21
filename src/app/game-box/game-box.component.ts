@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { QuestionsForm } from 'src/app/models/User.model';
+import { QuestionsForm, SettingsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { GameService } from '../shared/game.service';
 @Component({
@@ -19,11 +19,12 @@ export class GameBoxComponent implements OnInit {
     clientId: '',
     topicId: '',
   };
-
+  config:SettingsForm
   client: any;
 
   start: any;
-  time_start = 35;
+  time_start = 0;
+  time_alert=0;
   percent_time = '0%';
   ques_total = 0;
   user_select: number[] = [];
@@ -44,8 +45,17 @@ export class GameBoxComponent implements OnInit {
 
   ngOnInit(): void {
     this.dataInit = this.game$.getDataClient();
+    this.getConfig()
     this.getQuestions();
     this.getClient();
+  }
+
+  getConfig(){
+    this.firebase$.getConfig().subscribe((config:any)=>{
+      this.config=config[0]
+      this.time_start=this.config.time_total;
+      this.time_alert=this.config.time_alert
+    })
   }
 
   getClient() {
@@ -65,11 +75,12 @@ export class GameBoxComponent implements OnInit {
         this.ques_total = questions.length;
         if (this.ques_total > 0) {
           this.startGame();
-          this.questions.forEach((e) => this.user_select.push(-1));
+          this.questions.forEach((e) => this.user_select.push(-100));
+          //use -100 as default answer of question, when you click ,-100 will change by index of answer
         }
       });
   }
-
+ 
   startGame() {
     this.start = setInterval(() => {
       this.time_start--;
@@ -86,7 +97,7 @@ export class GameBoxComponent implements OnInit {
     this.calculatorScore();
     this.showGame = false;
     this.showResult = true;
-    this.firebase$.updateClient(this.dataInit.topicId, this.score, Date.now());
+    this.firebase$.updateClient(this.dataInit.clientId, this.score, Date.now());
   }
 
   nextQuestion() {
@@ -99,11 +110,14 @@ export class GameBoxComponent implements OnInit {
   optionSelected(questionIndex: number, select: number) {
     this.user_select[questionIndex] = select;
   }
-
+  
   calculatorScore() {
     this.user_select.forEach((e, i) => {
-      if (this.questions[i].answers[e].status === true) this.score++;
+      if(e!==-100){
+        if (this.questions[i].answers[e].status === true) this.score++;
+      }
     });
+
     let percent = (this.score * 100) / this.ques_total;
     //  < 10% => nood, <60% => medium, >60 % =>good
     if (percent < 10) {

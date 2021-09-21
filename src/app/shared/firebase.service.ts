@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize, take } from 'rxjs/operators';
-import { ClientForm, ILogin, QuestionsForm } from '../models/User.model';
+import { ClientForm, ILogin, QuestionsForm, SettingsForm } from '../models/User.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -116,5 +116,16 @@ export class FirebaseService {
   }
   editQuestions(id: string, questions: QuestionsForm) {
     return this.firestore.collection('questions').doc(id).update(questions);
+  }
+  getConfig(){
+    return this.firestore
+      .collection('config')
+      .valueChanges()
+      .pipe(take(1));
+  }
+  editConfig(form:SettingsForm){
+    return this.firestore
+      .collection('config').doc('app_config').update(form);
+      
   }
 }

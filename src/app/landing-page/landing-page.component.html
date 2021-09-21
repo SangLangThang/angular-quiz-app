@@ -6,14 +6,32 @@
   <a mat-raised-button color="primary" class="grid-2" (click)="openRules()">Thể lệ cuộc thi</a>
   <div class="time-start time-box grid-3">
     <p>Bắt đầu</p>
-    <p>08H00 <br> {{ getDateTime() | date: 'dd/MM/yyyy' }}</p>
+    <p>{{config?.event_start|date:'HH:mm'}} <br> {{ config?.event_start | date: 'dd/MM/yyyy' }}</p>
   </div>
   <div class="time-end time-box grid-4">
     <p>Kết thúc</p>
-    <p>11H00 <br> {{ getDateTime() | date: 'dd/MM/yyyy' }}</p>
+    <p>{{config?.event_end|date:'HH:mm'}} <br> {{ config?.event_end | date: 'dd/MM/yyyy' }}</p>
   </div>
   <div class="time-total time-box grid-5">
     <p>Cuộc thi kết thúc trong</p>
-    <p>11H00 <br> {{ getDateTime() | date: 'dd/MM/yyyy' }}</p>
+
+    <div class="time-total-box">
+      <div class="time-total-item">
+        <countdown [config]="{leftTime:time_left,format: 'dd'}"></countdown>
+        <p>Ngày</p>
+      </div>
+      <div class="time-total-item">
+        <countdown [config]="{leftTime:time_left,format: 'HH'}"></countdown>
+        <p>Giờ</p>
+      </div>
+      <div class="time-total-item">
+        <countdown [config]="{leftTime:time_left,format: 'mm'}"></countdown>
+        <p>Phút</p>
+      </div>
+      <div class="time-total-item">
+        <countdown [config]="{leftTime:time_left,format: 'ss'}"></countdown>
+        <p>Giây</p>
+      </div>
+    </div>
   </div>
 </div>
