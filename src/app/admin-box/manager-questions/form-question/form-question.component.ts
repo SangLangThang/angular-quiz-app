@@ -1,7 +1,6 @@
-import { SessionService } from './../../../shared/session.service';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { DialogService } from '../../../shared/dialog.service';
@@ -14,7 +13,6 @@ export class FormQuestionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private dialog$: DialogService,
-    private session$: SessionService,
     private firebase$: FirebaseService,
     private router: Router,
     private route: ActivatedRoute
@@ -46,6 +44,7 @@ export class FormQuestionComponent implements OnInit {
       this.answers.at(0).patchValue({ status: true });
     }
   }
+
   buildForm() {
     this.questionForm = this.fb.group({
       question: [this.question?.question ?? '', Validators.required],
@@ -58,21 +57,22 @@ export class FormQuestionComponent implements OnInit {
       ),
     });
   }
+
   createAnswer(item?: any): FormGroup {
     return this.fb.group({
       name: [item?.name ?? '', Validators.required],
       status: [item?.status ?? false, Validators.required],
     });
   }
+
   addAnswer() {
     this.answers.push(this.createAnswer());
   }
+
   removeAnswer(index: number) {
     this.answers.removeAt(index);
   }
-  onSelectMultiAnswer(value: any) {
-    console.log(value);
-  }
+
   clearCheckbox(index: number) {
     if (this.questionForm.value.multiAnswer == false) {
       for (let i = 0; i < this.answers.controls.length; i++) {
@@ -92,8 +92,9 @@ export class FormQuestionComponent implements OnInit {
     this.questionForm.patchValue({ type: 'text' });
     this.answers.at(0).patchValue({ status: true });
   }
+
   onSubmit(value: any) {
-    this.submitted = true;
+    
     if(this.questionId){
       this.editQuestion(this.questionId,value)
       return
@@ -106,16 +107,17 @@ export class FormQuestionComponent implements OnInit {
       topicId: this.topicId,
       ...valueForm,
     };
-    console.log(newQuestionsForm);
-    this.firebase$.addQuestions(newQuestionsForm).then((value) => {
-      this.dialog$.openSnackBar();
-      this.router.navigate(['../../'], { relativeTo: this.route });
-    });
+    this.firebase$.addQuestions(newQuestionsForm)
+      .then(()=>{
+        this.reset()
+        this.submitted = true;
+      });
   }
   private editQuestion(questionID: string, valueForm: any) {
-    this.firebase$.editQuestions(questionID, valueForm).then((value) => {
-      this.dialog$.openSnackBar();
-      this.router.navigate(['../../'], { relativeTo: this.route });
-    });
+    this.firebase$.editQuestions(questionID, valueForm)
+      .then(() => {
+        this.submitted = true;
+        this.router.navigate(['../../'], { relativeTo: this.route });
+      });
   }
 }

@@ -1,0 +1,16 @@
+:host {
+  width: 100%;
+  padding: 10px;
+}
+.form {
+    overflow: hidden;
+  span {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .input{
+      .mat-form-field{
+          width: 250px;
+      }
+  }
+}

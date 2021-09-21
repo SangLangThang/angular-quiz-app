@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { finalize, take } from 'rxjs/operators';
-import { ClientForm, ILogin, QuestionsForm } from '../models/User.model';
+import { ClientForm, ILogin, QuestionsForm, SettingsForm } from '../models/User.model';
 @Injectable({
   providedIn: 'root',
 })
@@ -12,7 +12,7 @@ export class FirebaseService {
     private storage: AngularFireStorage
   ) {}
   isCreatedClient = false;
-  isLogin = true;
+  isLogin = false;
 
   downloadURL: string;
   uploadFile(file: any) {
@@ -44,7 +44,7 @@ export class FirebaseService {
     return this.firestore.collection('clients').add(clientForm);
   }
   getClients() {
-    return this.firestore.collection('clients').valueChanges().pipe(take(1));
+    return this.firestore.collection('clients').valueChanges({ idField: 'id' });
   }
   getClient(clientId: string) {
     return this.firestore
@@ -52,6 +52,9 @@ export class FirebaseService {
       .doc(clientId)
       .valueChanges()
       .pipe(take(1));
+  }
+  deleteClient(clientId: string) {
+    return this.firestore.collection('clients').doc(clientId).delete();
   }
   updateClient(clientId: string, score: number, time: number) {
     this.firestore
@@ -76,6 +79,11 @@ export class FirebaseService {
       .valueChanges({ idField: 'topicId' })
       .pipe(take(1));
   }
+  getTopicsWithLevelId(levelId: string) {
+    return this.firestore
+      .collection('topics', (ref) => ref.where('levelId', '==', levelId))
+      .valueChanges({ idField: 'topicId' });
+  }
   getTopicsWithId(id: string) {
     return this.firestore
       .collection('topics', (ref) => ref.where('levelId', '==', id))
@@ -94,8 +102,7 @@ export class FirebaseService {
   getQuestions(topicId: string) {
     return this.firestore
       .collection('questions', (ref) => ref.where('topicId', '==', topicId))
-      .valueChanges({ idField: 'questionId' })
-      .pipe(take(1));
+      .valueChanges({ idField: 'questionId' });
   }
   getQuestion(id: string) {
     return this.firestore.collection('questions').doc(id).valueChanges();
@@ -109,5 +116,16 @@ export class FirebaseService {
   }
   editQuestions(id: string, questions: QuestionsForm) {
     return this.firestore.collection('questions').doc(id).update(questions);
+  }
+  getConfig(){
+    return this.firestore
+      .collection('config')
+      .valueChanges()
+      .pipe(take(1));
+  }
+  editConfig(form:SettingsForm){
+    return this.firestore
+      .collection('config').doc('app_config').update(form);
+      
   }
 }

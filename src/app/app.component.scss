@@ -1,5 +1,10 @@
+.box {
+  display: block;
+  width: 100%;
+  overflow: hidden;
+}
 .logo {
-  max-width: 80px;
+  max-width: 50px;
 }
 .login-btn,
 .home-btn {
@@ -14,7 +19,8 @@
 }
 .title {
   text-transform: uppercase;
-  font-size: 25px;
+  font-size: 20px;
+  line-height: 22px;
   color: white;
   font-weight: 500;
   text-align: center;
@@ -22,22 +28,17 @@
   font-family: Iciel;
 }
 .header {
-  height: 100px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background-color: #3f51b5;
-  &-logo {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  & h2 {
+    margin-bottom: 0;
+    & img,
+    & h3 {
+      cursor: pointer;
+    }
   }
+  background-color: #3f51b5;
 }
 
-@media only screen and (max-width: 769px) {
-  .header{
-    height: 70px;
-  }
+@media only screen and (max-width: 767px) {
   .logo {
     max-width: 55px;
   }
@@ -46,12 +47,9 @@
     line-height: 18px;
   }
   .login-btn,
-.home-btn{
-  margin-right: 0;
-}
-
-}
-@media only screen and (max-width: 500px) {
+  .home-btn {
+    margin-right: 0;
+  }
   .text {
     display: none;
   }
