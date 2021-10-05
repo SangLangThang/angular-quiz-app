@@ -80,7 +80,7 @@ export class GameBoxComponent implements OnInit {
         }
       });
   }
- 
+
   startGame() {
     this.start = setInterval(() => {
       this.time_start--;
@@ -110,7 +110,7 @@ export class GameBoxComponent implements OnInit {
   optionSelected(questionIndex: number, select: number) {
     this.user_select[questionIndex] = select;
   }
-  
+
   calculatorScore() {
     this.user_select.forEach((e, i) => {
       if(e!==-100){

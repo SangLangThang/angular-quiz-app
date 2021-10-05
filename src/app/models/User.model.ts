@@ -16,6 +16,7 @@ export interface Topics {
 }
 export interface QuestionsForm {
   question: string;
+  questionImg?: string;
   topicId: string;
   multiAnswer: boolean;
   type?: string;

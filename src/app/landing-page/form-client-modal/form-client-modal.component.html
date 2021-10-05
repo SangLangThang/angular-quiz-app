@@ -27,7 +27,7 @@
         <div class="col-6 ">
           <mat-form-field appearance="outline" class="custom-input">
             <mat-label>Cấp</mat-label>
-            <mat-select formControlName="levelId" (selectionChange)="getTopics()">
+            <mat-select formControlName="levelId" (selectionChange)="changeLevel()">
               <mat-option *ngFor="let level of levels" [value]="level.levelId">
                 {{level.name }}
               </mat-option>

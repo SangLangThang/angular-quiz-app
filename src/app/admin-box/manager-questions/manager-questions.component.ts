@@ -16,10 +16,13 @@ export class ManagerQuestionsComponent implements OnInit {
   questions: QuestionsForm[];
   currentLevelId: string;
   currentTopicId: string;
-  currentTopicIndex: number = 0;
   inputTopicName: string = '';
   tabIndex: number;
   toggle: any[] = [];
+  // cacheObject: any = {
+  //   currentLevelId: '',
+  //   currentTopicId: ''
+  // };
 
   constructor(
     private firebase$: FirebaseService,
@@ -29,9 +32,32 @@ export class ManagerQuestionsComponent implements OnInit {
     this.getLevels();
   }
 
+  // ngOnDestroy(): void {
+  //   localStorage.removeItem('cacheObject');
+  // }
+
+  // getLocalStorage() {
+  //   const cache = localStorage.getItem('cacheObject');
+  //   if(localStorage.getItem('cacheObject'))
+  //     this.cacheObject = JSON.parse(cache ?? '')
+  //   this.getLevels();
+  // }
+
+  // setLocalStorage() {
+  //   this.cacheObject.currentLevelId = this.currentLevelId;
+  //   this.cacheObject.currentTopicId = this.currentTopicId;
+  //   localStorage.setItem('cacheObject', JSON.stringify(this.cacheObject));
+  // }
+
   getLevels() {
     this.firebase$.getLevels().subscribe((levels: any[]) => {
       this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
+      // if(this.cacheObject && this.cacheObject.currentLevelId) {
+      //   this.currentLevelId = this.cacheObject.currentLevelId;
+      // } else {
+      //  this.cacheObject.currentLevelId = this.currentLevelId;
+      // }
+      // this.cacheObject.currentLevelId = this.currentLevelId;
       this.currentLevelId = this.levels[0].levelId;
       this.getTopics();
     });
@@ -47,6 +73,12 @@ export class ManagerQuestionsComponent implements OnInit {
           return;
         }
         this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
+        // if(this.cacheObject && this.cacheObject.currentTopicId) {
+        //   this.currentTopicId = this.cacheObject.currentTopicId;
+        // } else {
+        //   this.currentTopicId = this.topics[0].topicId;
+        // }
+        // this.cacheObject.currentTopicId = this.currentTopicId;
         this.currentTopicId = this.topics[0].topicId;
         this.getQuestions();
       });
@@ -81,18 +113,22 @@ export class ManagerQuestionsComponent implements OnInit {
   deleteQuestion(questionId: string) {
     this.firebase$.deleteQuestion(questionId).then((_) => this.getQuestions());
   }
+
   changeLevel() {
     this.questions = []; //clear question when reload because if topic length <0
     this.getTopics();
   }
+
   changeTopic(id: string) {
     this.currentTopicId = id;
+    // this.cacheObject.currentTopicId = this.currentTopicId;
     this.getQuestions();
   }
+
   toggleAnswer(index: number) {
     if(this.toggle.includes(index)){
       this.toggle=this.toggle.filter(x=>x!=index)
-      return 
+      return
     }
     this.toggle.push(index)
   }

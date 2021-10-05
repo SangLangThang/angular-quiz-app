@@ -48,15 +48,14 @@
                 </ul>
               </div>
               <div class="item-btn">
-                <button type="button" class="btn btn-primary me-1"
-                  [routerLink]="['edit',question.questionId]">Sửa</button>
+                <button type="button" class="btn btn-primary me-1" [routerLink]="['edit', question.questionId]">Sửa</button>
                 <button type="button" class="btn btn-danger" (click)="deleteQuestion(question.questionId)">Xoá</button>
               </div>
             </div>
           </li>
         </ng-container>
       </ul>
-      <button type="button" [disabled]="topics?.length==0"  class="btn btn-primary mt-1" [routerLink]="['new',currentTopicId]">Thêm</button>
+      <button type="button" [disabled]="topics?.length==0"  class="btn btn-primary mt-1" [routerLink]="['new', currentTopicId]">Thêm</button>
     </div>
   </div>
 </div>
