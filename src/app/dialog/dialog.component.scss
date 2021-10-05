@@ -1,0 +1,26 @@
+.desc {
+    display: flex;
+    align-items: center;
+    .time {
+      font-weight: 600;
+      color: #007bff;
+    }
+    .note {
+      font-weight: 600;
+      color: red;
+    }
+  }
+  .box{
+    background-color: #fff;
+    margin: 0 auto;
+    padding: 15px 10px;
+    border-radius: 5px;
+    max-width: 375px;
+  }
+  h2{
+    text-align: center;
+  }
+  .btn{
+    display: flex;
+    justify-content: center;
+  }

@@ -6,7 +6,7 @@
         <mat-form-field appearance="outline">
           <input matInput [ngxMatDatetimePicker]="event_start" formControlName="event_start">
           <mat-datepicker-toggle matSuffix [for]="$any(event_start)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker [showSeconds]="true" [enableMeridian]="true" #event_start></ngx-mat-datetime-picker>
+          <ngx-mat-datetime-picker [showSeconds]="true"  #event_start></ngx-mat-datetime-picker>
         </mat-form-field>
       </div>
     </div>
@@ -16,7 +16,7 @@
         <mat-form-field appearance="outline">
           <input matInput [ngxMatDatetimePicker]="event_end"  formControlName="event_end">
           <mat-datepicker-toggle matSuffix [for]="$any(event_end)"></mat-datepicker-toggle>
-          <ngx-mat-datetime-picker [showSeconds]="true" [enableMeridian]="true" #event_end></ngx-mat-datetime-picker>
+          <ngx-mat-datetime-picker [showSeconds]="true"  #event_end></ngx-mat-datetime-picker>
         </mat-form-field>
       </div>
     </div>

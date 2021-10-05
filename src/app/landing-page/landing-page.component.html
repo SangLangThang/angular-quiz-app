@@ -2,8 +2,9 @@
   <img src="../../assets/landing_img.jpeg" alt="background">
 </div>
 <div class="info px-2">
-  <a mat-raised-button color="primary" class="grid-1" (click)="openFormClient()">Tham gia dự thi</a>
-  <a mat-raised-button color="primary" class="grid-2" (click)="openRules()">Thể lệ cuộc thi</a>
+  <button mat-raised-button color="primary" class="grid-1" (click)="openFormClient()">Tham gia dự
+    thi</button>
+  <button mat-raised-button color="primary" class="grid-2" (click)="openRules()">Thể lệ cuộc thi</button>
   <div class="time-start time-box grid-3">
     <p>Bắt đầu</p>
     <p>{{config?.event_start|date:'HH:mm'}} <br> {{ config?.event_start | date: 'dd/MM/yyyy' }}</p>
@@ -14,24 +15,10 @@
   </div>
   <div class="time-total time-box grid-5">
     <p>Cuộc thi kết thúc trong</p>
-
-    <div class="time-total-box">
-      <div class="time-total-item">
-        <countdown [config]="{leftTime:time_left,format: 'dd'}"></countdown>
-        <p>Ngày</p>
-      </div>
-      <div class="time-total-item">
-        <countdown [config]="{leftTime:time_left,format: 'HH'}"></countdown>
-        <p>Giờ</p>
-      </div>
-      <div class="time-total-item">
-        <countdown [config]="{leftTime:time_left,format: 'mm'}"></countdown>
-        <p>Phút</p>
-      </div>
-      <div class="time-total-item">
-        <countdown [config]="{leftTime:time_left,format: 'ss'}"></countdown>
-        <p>Giây</p>
-      </div>
-    </div>
+    <p [ngStyle]="{'paddingTop':'16px'}">
+      <countdown [config]="setFormatCountdownConfig(countdownConfig,
+      'DD Ngày -  HH Giờ  -  mm Phút -   ss Giây'
+      )"></countdown>
+    </p>
   </div>
 </div>
