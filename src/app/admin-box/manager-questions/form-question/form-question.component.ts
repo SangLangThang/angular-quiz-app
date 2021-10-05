@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { QuestionsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
-import { DialogService } from '../../../shared/dialog.service';
+
 @Component({
   selector: 'app-form-question',
   templateUrl: './form-question.component.html',
@@ -12,7 +12,6 @@ import { DialogService } from '../../../shared/dialog.service';
 export class FormQuestionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
-    private dialog$: DialogService,
     private firebase$: FirebaseService,
     private router: Router,
     private route: ActivatedRoute
@@ -25,14 +24,17 @@ export class FormQuestionComponent implements OnInit {
     }
   }
   submitted = false;
-
+  isSuccess: boolean = false;
+  message: string;
   questionForm: FormGroup;
   topicId: string;
   questionId: string;
   question: any;
+
   get answers(): FormArray {
     return this.questionForm.get('answers') as FormArray;
   }
+
   ngOnInit(): void {
     if (this.questionId) {
       this.firebase$.getQuestion(this.questionId).subscribe((data: any) => {
@@ -48,6 +50,7 @@ export class FormQuestionComponent implements OnInit {
   buildForm() {
     this.questionForm = this.fb.group({
       question: [this.question?.question ?? '', Validators.required],
+      questionImg: [this.question?.questionImg ?? '', null],
       multiAnswer: [this.question?.multiAnswer ?? false, Validators.required],
       type: [this.question?.type ?? 'text', Validators.required],
       answers: new FormArray(
@@ -94,7 +97,6 @@ export class FormQuestionComponent implements OnInit {
   }
 
   onSubmit(value: any) {
-    
     if(this.questionId){
       this.editQuestion(this.questionId,value)
       return
@@ -109,15 +111,29 @@ export class FormQuestionComponent implements OnInit {
     };
     this.firebase$.addQuestions(newQuestionsForm)
       .then(()=>{
-        this.reset()
+        this.message = `Thêm ${this.questionForm.value.question} thành công`;
+        this.isSuccess = true;
         this.submitted = true;
+        this.reset();
+        this.hideAlert();
       });
   }
+
   private editQuestion(questionID: string, valueForm: any) {
     this.firebase$.editQuestions(questionID, valueForm)
       .then(() => {
+        this.message = `Chỉnh sửa ${this.questionForm.value.question} thành công`;
+        this.isSuccess = true;
         this.submitted = true;
-        this.router.navigate(['../../'], { relativeTo: this.route });
+        this.hideAlert();
+        // this.router.navigate(['../../'], { relativeTo: this.route });
       });
+  }
+
+  hideAlert() {
+    setTimeout(() => {
+      this.isSuccess = false;
+      this.message = '';
+    }, 3000);
   }
 }

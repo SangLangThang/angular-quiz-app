@@ -1,6 +1,6 @@
 <div class=box>
   <div class="bg" *ngIf="showBackground">
-    <img src="../../assets/loading.jpg" alt="">
+    <img src="../../assets/loading.jpg">
   </div>
   <div class="game-box" *ngIf="showGame">
     <div class="alert alert-danger" *ngIf="time_start <= time_alert">
@@ -9,35 +9,34 @@
     <header>
       <div class="title">Tìm hiểu kiến thức ATGT</div>
       <div class="timer">
-        <!-- <div class="time_left_txt">Thời gian còn</div>
-        <div class="timer_sec">{{ time_start }}</div>
-        <div class="time_right_txt">phút</div> -->
         <countdown [config]="{leftTime: time_start*60}"></countdown>
       </div>
       <div class="time_line" [style.width]="percent_time"></div>
     </header>
     <!-- section -->
-    <section *ngFor="let question of questions; let i = index" [class.hide]="i !== currentQuestion">
-      <div class="que_text">
-        <span>
-          {{ question.question }}
-        </span>
-      </div>
-      <div class="option_list" [class.flex]="question.type==='picture'">
-        <ng-container *ngFor="let option of question.answers; let j = index">
-          <div class="option" [class.correct]="user_select[i]==j" (click)="optionSelected(i,j)">
-            <span *ngIf="question.type==='picture'; else nopicture" class="option_img">
-              <img [src]="option.name">
-            </span>
-            <ng-template #nopicture>
-              <span>{{ option.name }}</span>
-            </ng-template>
-            <mat-icon class="icon tick">check</mat-icon>
-          </div>
-        </ng-container>
-      </div>
-    </section>
-
+    <div class="card-body scroll">
+      <section *ngFor="let question of questions; let i = index" [class.hide]="i !== currentQuestion">
+        <div class="que_text">
+          <span>{{ question.question }}</span>
+        </div>
+        <div *ngIf="question.questionImg" class="question-img text-center">
+          <img [src]="question.questionImg" width="100%">
+        </div>
+        <div class="option_list" [class.flex]="question.type==='picture'">
+          <ng-container *ngFor="let option of question.answers; let j = index">
+            <div class="option" [class.correct]="user_select[i]==j" (click)="optionSelected(i,j)">
+              <span *ngIf="question.type==='picture'; else nopicture" class="option_img">
+                <img [src]="option.name">
+              </span>
+              <ng-template #nopicture>
+                <span>{{ option.name }}</span>
+              </ng-template>
+              <mat-icon class="icon tick">check</mat-icon>
+            </div>
+          </ng-container>
+        </div>
+      </section>
+    </div>
     <!-- footer -->
     <footer>
       <div class="total_que">

@@ -36,8 +36,18 @@ export class FormClientModalComponent implements OnInit {
     this.firebase$.getLevels()
       .subscribe((levels: any[]) => {
         this.levels = levels.sort((a, b) => (a.name < b.name ? -1 : 1));
-        this.currentLevelId = this.levels[0].levelId;
+        if(this.levels.length > 0)
+          this.currentLevelId = this.levels[0].levelId;
         this.getTopics();
+      });
+  }
+
+  changeLevel() {
+    this.firebase$.getTopicsWithLevelId(this.clientForm.value.levelId)
+      .subscribe((topics: any[]) => {
+        this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
+        if(this.topics.length > 0)
+          this.clientForm.get('topicId')?.setValue(this.topics[0].topicId);
       });
   }
 
@@ -45,7 +55,8 @@ export class FormClientModalComponent implements OnInit {
     this.firebase$.getTopicsWithLevelId(this.currentLevelId)
       .subscribe((topics: any[]) => {
         this.topics = topics.sort((a, b) => (a.name < b.name ? -1 : 1));
-        this.defaultTopic = this.topics[0].topicId;
+        if(this.topics.length > 0)
+          this.defaultTopic = this.topics[0].topicId;
         this.buildForm();
       });
   }
@@ -59,6 +70,7 @@ export class FormClientModalComponent implements OnInit {
       levelId: [this.currentLevelId ?? null, [Validators.required]],
     });
   }
+
   onSubmit() {
     this.isCreating = true;
     const newClient = {
