@@ -17,7 +17,7 @@ import { LoginModalComponent } from './landing-page/login-modal/login-modal.comp
 import { RulesModalComponent } from './landing-page/rules-modal/rules-modal.component';
 import { MaterialModule } from './material-module';
 import { SnackBarComponent } from './snack-bar/snack-bar.component';
-import { CountdownGlobalConfig, CountdownModule } from 'ngx-countdown';
+import { CountdownModule } from 'ngx-countdown';
 
 @NgModule({
   declarations: [
@@ -41,15 +41,9 @@ import { CountdownGlobalConfig, CountdownModule } from 'ngx-countdown';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFirestoreModule,
     AngularFireStorageModule,
-    CountdownModule
+    CountdownModule,
   ],
-  providers: [
-    { provide: CountdownGlobalConfig, useFactory: countdownConfigFactory }
-  ],
+  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
-
-function countdownConfigFactory() {
-  return { format: `mm:ss` };
-}
