@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { QuestionsForm, SettingsForm } from 'src/app/models/User.model';
 import { FirebaseService } from 'src/app/shared/firebase.service';
 import { GameService } from '../shared/game.service';
@@ -68,7 +69,7 @@ export class GameBoxComponent implements OnInit {
 
   getQuestions() {
     this.firebase$
-      .getQuestions(this.dataInit.topicId)
+      .getQuestions(this.dataInit.topicId).pipe(take(1))
       .subscribe((questions: any) => {
         if (questions?.length <= 0) this.router.navigate(['/']);
         this.questions = questions;
@@ -85,7 +86,7 @@ export class GameBoxComponent implements OnInit {
     this.start = setInterval(() => {
       this.time_start--;
       this.percent_time = `${((35 - this.time_start) * 100) / 35}%`;
-      if (this.time_start === 0) {
+      if (this.time_start <= 0) {
         clearInterval(this.start);
         this.endGame();
       }
